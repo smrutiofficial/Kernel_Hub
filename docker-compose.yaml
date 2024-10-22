@@ -1,4 +1,7 @@
-version: "3.8"
+# version: "3.8"
+networks:
+  app-network:
+    driver: bridge
 
 services:
   mongodb:
@@ -8,6 +11,8 @@ services:
       - "8001:27017"
     volumes:
       - mongo-data:/data/db
+    networks:
+      - app-network
 
   server:
     build:
@@ -20,6 +25,19 @@ services:
       - "5000:5000"
     depends_on:
       - mongodb
+    volumes:
+      - ./server:/usr/src/server
+    networks:
+      - app-network
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /usr/src/server
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package*.json
 
   client:
     build:
@@ -30,6 +48,19 @@ services:
       - "3000:3000"
     depends_on:
       - server
+    volumes:
+      - ./client:/usr/src/client
+    networks:
+      - app-network
+    develop:
+      watch:
+        - action: sync
+          path: ./client
+          target: /usr/src/client
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package*.json
 
   admin:
     build:
@@ -40,6 +71,19 @@ services:
       - "4000:4000"
     depends_on:
       - server
+    volumes:
+      - ./admin:/usr/src/admin
+    networks:
+      - app-network
+    develop:
+      watch:
+        - action: sync
+          path: ./admin
+          target: /usr/src/admin
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package*.json
 
 volumes:
   mongo-data:
