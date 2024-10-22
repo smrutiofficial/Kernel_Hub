@@ -1,9 +1,11 @@
 import { FaArrowTrendUp } from "react-icons/fa6";
 import Image from "next/image";
+import Link from "next/link";
 // import { useEffect, useState } from 'react'; // Added useState hook
 
 // Define the type for Post data
 interface PostData {
+  _id: number;
   id: number;
   title: string;
   content: string;
@@ -18,10 +20,7 @@ interface PostProps {
   totalpage: (message: string) => void; // Add this line
 }
 
-const Post = ({postData}: PostProps) => {
-  // Removed useState hook as it's not needed anymore
-console.log(postData);
-
+const Post = ({ postData }: PostProps) => {
   function timeAgo(date: Date) {
     const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
 
@@ -77,7 +76,7 @@ console.log(postData);
           <div className="w-full h-[13rem]">
             <div className="overflow-hidden bg-gray-700 h-full rounded-tl-lg rounded-tr-lg">
               <Image
-                src={postItem.image}
+                src={`/${postItem.image}`}
                 alt={`Cover for ${postItem.title}`}
                 width={100}
                 height={100}
@@ -88,12 +87,14 @@ console.log(postData);
           <div className="w-full">
             <div className="bg-gray-800 p-4 rounded-bl-lg rounded-br-lg h-64">
               <div className="flex flex-row gap-4 justify-center items-center">
-                <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
-                  {postItem.title}
-                </h1>
-                <p className="text-3xl">
-                  <FaArrowTrendUp />
-                </p>
+                <Link href={`/blog/${postItem._id}`}>
+                  <a className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
+                    {postItem.title}
+                  </a>
+                  <p className="text-3xl">
+                    <FaArrowTrendUp />
+                  </p>
+                </Link>
               </div>
               <p className="text-sm text-gray-400 h-16 overflow-hidden">
                 {postItem.content}
