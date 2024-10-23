@@ -7,7 +7,7 @@ const Newblog = () => {
   const [filename, setFilename] = React.useState("No file chosen yet...");
   return (
     <div className="p-12 w-full">
-      <p className="text-2xl font-bold text-center">EDIT NEW BLOG</p>
+      <p className="text-2xl font-bold text-center">Edit New Blog</p>
       {image && (
         <div className="h-36 w-48 rounded-md overflow-hidden bg-gray-800 absolute mt-52">
           <Image src={image} alt="" layout="fill" objectFit="cover" />
@@ -21,7 +21,7 @@ const Newblog = () => {
               name="title"
               placeholder="Enter Post Title"
               id="title"
-              className="mt-1 border-2 border-gray-500 font-bold px-10 w-2/3 h-12 bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
+              className="mt-1 border-2 border-gray-500 font-bold px-10 w-2/3 h-16 bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
             />
           </div>
           <div className="w-full flex flex-col items-center">
@@ -89,9 +89,9 @@ const Newblog = () => {
           </div>
           <button
             type="submit"
-            className="inline-flex justify-center rounded-md border border-transparent bg-[#AAFFA9] py-5 text-sm w-2/3 text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
+            className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-2/3 text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
           >
-            PUBLISH
+            Publish
           </button>
         </form>
       </div>
