@@ -63,7 +63,7 @@ const Postr = ({ pid }: PostProps) => {
   return (
     <>
       {postData && (
-        <div key={postData.id} className="flex flex-row w-full border ">
+        <div key={postData.id} className="flex flex-row w-full ">
           <div className="w-1/2 py-4 pl-4 overflow-hidden">
             {/* Content for the first div */}
             <div className=" bg-gray-700 h-[17.5rem] overflow-hidden object-cover rounded-tl-lg rounded-bl-lg">
