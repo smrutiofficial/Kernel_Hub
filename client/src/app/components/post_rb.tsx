@@ -77,7 +77,7 @@ const Post_rb = () => {
 
           <div className="p-4">
           <div className="flex flex-row gap-4 justify-between items-center">
-                <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
+                <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden border">
                   {postData[0].title}
                 </h1>
                 <p className="text-3xl">
