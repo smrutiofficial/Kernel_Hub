@@ -29,21 +29,8 @@ const Newblog = () => {
         content: content,
       };
       
-      
-      // formData.append("title", title);
-      // formData.append("slug", slug);
-      // formData.append("tags", JSON.stringify(tags));
-      // formData.append("content", content);
-      // if (image) {
-        //   const imageInput = document.getElementById("image") as HTMLInputElement; // Type assertion
-        //   if (imageInput.files && imageInput.files[0]) { // Check if files exist
-        //     formData.append("image", imageInput.files[0]);
-        //   }
-        // }
-        const response = await axios.post("http://localhost:5000/api/posts/newpost", formData);
-        
-        console.log(response.data);
-      
+      await axios.post("http://localhost:5000/api/posts/newpost", formData);
+      alert("Your post successfully published")
       // Handle success response
     } catch (error: unknown) { // Change type to unknown
       if (axios.isAxiosError(error)) { // Check if it's an Axios error

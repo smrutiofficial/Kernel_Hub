@@ -9,7 +9,7 @@ import Postrb from "./components/post_rb";
 
 export default function Home() {
   // const [activeButton, setActiveButton] = useState("All");
-  const [activeButton, setActiveButton] = useState("All");
+  const [activeButton, setActiveButton] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const [total_post, SetTotal_post] = useState(1);
   const [postData, setPostData] = useState([]); // Add this line to define setPostData
@@ -34,7 +34,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/posts?sort=${activeButton || 'newest'}&page=${currentPage}`
+          `http://localhost:5000/api/posts?page=${currentPage}&sort=${activeButton}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -50,16 +50,16 @@ export default function Home() {
     };
 
     fetchData();
-  }, [router,currentPage, activeButton]);
+  }, [router,currentPage,activeButton]);
 
   const handlePageChange = async (newPage: number) => {
     setCurrentPage(newPage);
-    await router.push(`/?page=${newPage}&sort=${activeButton}`);
+    router.push(`/?page=${newPage}&sort=${activeButton}`);
   };
 
   const handleSortChange = async (sortOption: string) => {
     setActiveButton(sortOption);
-    await router.push(`/?page=1&sort=${sortOption}`);
+    router.push(`/?page=1&sort=${sortOption}`);
   };
 
   return (

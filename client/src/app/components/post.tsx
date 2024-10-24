@@ -76,7 +76,7 @@ const Post = ({ postData }: PostProps) => {
           <div className="w-full h-[13rem]">
             <div className="overflow-hidden bg-gray-700 h-full rounded-tl-lg rounded-tr-lg">
               <Image
-                src={`/${postItem.image}`}
+                src=""
                 alt={`Cover for ${postItem.title}`}
                 width={100}
                 height={100}
@@ -86,8 +86,8 @@ const Post = ({ postData }: PostProps) => {
           </div>
           <div className="w-full">
             <div className="bg-gray-800 p-4 rounded-bl-lg rounded-br-lg h-64">
-              <div className="flex flex-row gap-4 justify-center items-center">
-                <Link href={`/blog/${postItem._id}`}>
+              <div className="flex flex-row gap-4 justify-between items-start">
+                <Link href={`/blog/${postItem._id}`} className="flex flex-row justify-between w-full ">
                   <a className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
                     {postItem.title}
                   </a>
@@ -99,6 +99,7 @@ const Post = ({ postData }: PostProps) => {
               <p className="text-sm text-gray-400 h-16 overflow-hidden">
                 {postItem.content}
               </p>
+              <div className="h-14 overflow-hidden">
               {postItem.tags.map((tag) => (
                 <button
                   key={tag}
@@ -108,6 +109,7 @@ const Post = ({ postData }: PostProps) => {
                   {tag}
                 </button>
               ))}
+              </div>
               <div className="flex items-center mt-4 text-sm text-gray-100">
                 <span className="flex items-center mr-4">
                   <svg
