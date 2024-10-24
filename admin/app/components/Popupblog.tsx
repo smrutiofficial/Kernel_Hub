@@ -1,17 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { SiGoogletagmanager } from "react-icons/si";
 import { MdCancel } from "react-icons/md";
+import axios from "axios";
+
+// Define the BlogPost interface
+
+interface BlogPost {
+  _id:string;
+  id: string;
+  title: string;
+  content: string;
+  slug: string;
+  createdAt: string; // Added createdAt property
+}
 
 interface PopupblogProps {
   popupst: string; // Add this line to include popupst
-  setPopupst: React.Dispatch<React.SetStateAction<string>>; // Add this line to include setPopupst
+  setPopupst: React.Dispatch<React.SetStateAction<string>>; 
+  blogPosts: BlogPost[]; // Change the type of blogPosts to BlogPost[]
+  setBlogPosts: React.Dispatch<React.SetStateAction<BlogPost[]>>;
+  cpost: string; // Assuming cpost is the ID of the post to fetch
+  // Add tags to PopupblogProps if needed
 }
 
-const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst }) => {
-  //   const [updateblog, setUpdateblog] = useState("block");
+const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst, cpost,blogPosts,setBlogPosts }) => {
+  const [post, setPost] = useState<BlogPost | null>(null); // Specify the type for post
   const [image, setImage] = React.useState<string | null>(null);
   const [filename, setFilename] = React.useState("No file chosen yet...");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/posts/${cpost}`);
+        setPost(response.data); // Assuming the API returns the post data directly
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      }
+    };
+
+    if (cpost) {
+      fetchData();
+    }
+  }, [cpost]);
+  // const handleDelete = async (postId: string) => {
+  //   try {
+  //     await axios.delete(`http://localhost:5000/api/posts/${postId}`);
+  //     setBlogPosts(blogPosts.filter(post => post._id !== postId));
+  //   } catch (error) {
+  //     console.error("Error deleting blog post:", error);
+  //   }
+  // };
+
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const title = formData.get('title') as string;
+    const slug = formData.get('slug') as string;
+    const content = formData.get('content') as string;
+    const imageFile = formData.get('image') as File;
+
+    try {
+      const imageBuffer = imageFile ? await imageFile.arrayBuffer() : null;
+      const response = await axios.put(`http://localhost:5000/api/posts/${cpost}`, {
+        title,
+        slug,
+        content,
+        image: imageBuffer,
+      });
+      setBlogPosts(blogPosts.map(post => post._id === cpost ? response.data : post)); // Update the post in the blogPosts state
+
+      console.log("Post updated successfully:", response.data);
+      setPopupst("hidden"); // Close the popup after successful update
+      
+    } catch (error) {
+      console.error("Error updating post:", error);
+    }
+  };
 
   return (
     <div
@@ -32,7 +97,9 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst }) => {
               <SiGoogletagmanager /> Manage Blog
             </span>
             <span>/</span>
-            <span>Update</span>
+            <span>Update</span>            <span>/</span>
+            <span>{cpost}</span>
+
           </p>
           <p
             className="text-xl top-10 cursor-pointer bg-red-400 px-4 py-1 rounded-md flex items-center gap-2"
@@ -50,13 +117,14 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst }) => {
           </div>
         )}
         <div className="flex flex-col items-center w-full mt-12">
-          <form className="flex flex-col gap-4 w-full items-center">
+          <form onSubmit={handleUpdate} className="flex flex-col gap-4 w-full items-center">
             <div className="w-full flex flex-col items-center">
               <input
                 type="text"
                 name="title"
                 placeholder="Enter Post Title"
                 id="title"
+                defaultValue={post?.title || ''} // Assuming post.title is the title of the post
                 className="mt-1 border-2 border-gray-500 font-bold px-10 w-2/3 h-16 bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
               />
             </div>
@@ -65,6 +133,7 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst }) => {
                 name="slug"
                 placeholder="Enter Slug For Post"
                 id="slug"
+                defaultValue={post?.slug || ''} // Assuming post.slug is the slug of the post
                 className="mt-1 w-2/3 resize-none h-28 py-4 border-2 border-gray-500 px-10 font-bold bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
               />
             </div>
@@ -119,6 +188,7 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst }) => {
                 id="content"
                 name="content"
                 rows={3}
+                defaultValue={post?.content || ''} // Assuming post.content is the content of the post
                 className="mt-1 border-2 border-gray-500 px-10 py-4 font-bold w-2/3 h-[12rem] block resize-none bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
                 placeholder="Write your blog content here im markdown ...."
               ></textarea>

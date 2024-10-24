@@ -7,6 +7,7 @@ import { SiGoogletagmanager } from "react-icons/si";
 import Pagination from "./Pagination";
 
 interface BlogPost {
+  _id:string;
   id: string;
   title: string;
   content: string;
@@ -26,7 +27,8 @@ const ManageBlog = () => {
   const [hoveredPostId, setHoveredPostId] = useState<string | null>(null); 
   const [popupst,setPopupst]=useState("hidden");// Added state for hoveredPostId
   const [cpage,setCpage]=useState(1)
-  const [totalpage,SetTotalpage]=useState(0)
+  const [totalpage,SetTotalpage]=useState(0);
+  const [cpost,setCpost]=useState("");
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
@@ -49,10 +51,18 @@ const ManageBlog = () => {
     setSortOption(event.target.value);
   };
 
+  const handleDelete = async (postId: string) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/posts/${postId}`);
+      setBlogPosts(blogPosts.filter(post => post._id !== postId));
+    } catch (error) {
+      console.error("Error deleting blog post:", error);
+    }
+  };
 
   return (
     <>
-      <Popupblog popupst={popupst} setPopupst={setPopupst} />
+      <Popupblog popupst={popupst} setPopupst={setPopupst} cpost={cpost} blogPosts={blogPosts} setBlogPosts={setBlogPosts}/>
       <div className="p-10 h-svh overflow-y-scroll relative">
         <div className="flex flex-row justify-between items-center">
         <p className="text-xl flex flex-row gap-2 items-center "> <span className="flex flex-row gap-2 items-center hover:text-[#AAFFA9] cursor-pointer"><SiGoogletagmanager/> Manage Blog</span>  <span>/</span>
@@ -113,7 +123,10 @@ const ManageBlog = () => {
 
               <div className="w-[10%] flex flex-row justify-center items-center gap-4 text-xl">
                 <RiEdit2Fill
-                  onClick={() => setPopupst("block")}
+                  onClick={() => {
+                    setPopupst("block")
+                    setCpost(post._id);
+                  }}
 
                   className={`h-[70%] w-8 rounded-md p-1 ${
                     hoveredPostId === post.id
@@ -126,6 +139,7 @@ const ManageBlog = () => {
                   }`}
                 />
                 <MdDelete
+                  onClick={() => handleDelete(post._id)}
                   className={`h-[70%] w-8 p-1 rounded-md ${
                     hoveredPostId === post.id
                       ? "bg-red-400 text-gray-700"

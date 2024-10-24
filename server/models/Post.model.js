@@ -5,15 +5,27 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  body: {
+  slug: {
     type: String,
     required: true,
   },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+  image: {
+    type: String,
+    required: false,
+  },
+  tags: {
+    type: Array,
     required: true,
   },
+  content: {
+    type: String,
+    required: true,
+  },
+  // author: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "User",
+  //   required: true,
+  // },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -11,9 +11,7 @@ import Services from "./components/Services";
 
 export default function Home() {
   const [sidev,setSidev]=useState("Dashboard");
-  const handleContents = (res:string) => {
-    console.log(res);
-    
+  const handleContents = (res:string) => {    
     setSidev(res)
   };
   return (

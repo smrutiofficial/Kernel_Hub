@@ -1,19 +1,30 @@
 const Post = require("../models/Post.model.js");
-const User = require("../models/User.model.js");
 
 // Create a post
 const createPost = async (req, res) => {
-  const { title, body } = req.body;
+  const { title, slug, image, tags, content } = req.body;
 
   try {
-    const user = await User.findById(req.user.id);
+    // Check if all required fields are present
+    if (!title || !slug || !tags || !content) {
+      return res.status(400).json({ msg: "Please fill in all fields" });
+    }
 
+    // Check if tags is an array
+    if (!Array.isArray(tags)) {
+      return res.status(400).json({ msg: "Tags must be an array" });
+    }
+
+    // Create a new post
     const newPost = new Post({
       title,
-      body,
-      author: req.user.id, // req.user will come from the authentication middleware
+      slug,
+      image,
+      tags,
+      content,
     });
 
+    // Save the post
     const post = await newPost.save();
     res.json(post);
   } catch (err) {
@@ -47,7 +58,6 @@ const getPosts = async (req, res) => {
 
     // Fetch posts with pagination, filtering, and sorting
     const posts = await Post.find(query)
-      .populate("author", ["name", "email"])
       .sort(sortOption)
       .limit(Number(limit))
       .skip((page - 1) * limit);
@@ -68,7 +78,7 @@ const getPosts = async (req, res) => {
 // Get a specific post by ID
 const getPostById = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate("author", ["name", "email"]);
+    const post = await Post.findById(req.params.id);
 
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
@@ -87,5 +97,35 @@ const getPostById = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getPosts, getPostById };
+// Update an existing post
+const updatePost = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { title, content },
+      { new: true }
+    );
+    if (!updatedPost)
+      return res.status(404).json({ message: "Post not found" });
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating post", error });
+  }
+};
 
+// Delete a post
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedPost = await Post.findByIdAndDelete(id);
+    if (!deletedPost)
+      return res.status(404).json({ message: "Post not found" });
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting post", error });
+  }
+};
+
+module.exports = { createPost, getPosts, getPostById, updatePost, deletePost };

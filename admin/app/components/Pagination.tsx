@@ -12,8 +12,6 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, setcpa
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
   const handlePageChange = (page: number) => {
     setcpage(page);
-    console.log(page);
-    
   };
   return (
     <div className="pagination flex flex-row justify-end items-center">

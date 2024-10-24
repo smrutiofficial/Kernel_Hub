@@ -40,7 +40,6 @@ const Sidebar = ({
       <div className="w-full flex flex-col items-center">
         <div className="flex flex-col mt-8 w-2/3 cursor-pointer">
           <button
-            // href="/"
             className={`${getItemStyle(
               "Dashboard"
             )} flex pl-12 gap-6 items-center `}
@@ -50,7 +49,6 @@ const Sidebar = ({
             Dashboard
           </button>
           <button
-            // href="/new-blog"
             className={`${getItemStyle(
               "New Blog"
             )} flex pl-12 gap-6 items-center`}
@@ -61,7 +59,6 @@ const Sidebar = ({
           </button>
 
           <button
-            // href="/manage-blog"
             className={`${getItemStyle(
               "Manage Blog"
             )} flex pl-12 gap-6 items-center`}
