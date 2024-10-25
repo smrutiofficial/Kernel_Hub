@@ -1,16 +1,16 @@
 # Base image
 FROM node:20
 
-WORKDIR /usr/src/admin
+WORKDIR /admin/app
 
-COPY package*.json ./
+COPY admin/package.json ./
 
 RUN npm install
 
-COPY . .
+COPY admin/ .
 
 RUN npm run build
 
 EXPOSE 4000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]

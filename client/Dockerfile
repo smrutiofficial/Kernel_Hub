@@ -1,15 +1,15 @@
 FROM node:20
 
-WORKDIR /usr/src/client
+WORKDIR /client/src/app
 
-COPY package*.json ./
+COPY client/package.json ./
 
 RUN npm install
 
-COPY . .
+COPY client/  .
 
 RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]
