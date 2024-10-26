@@ -8,6 +8,7 @@ interface PostData {
   _id: number;
   id: number;
   title: string;
+  slug:string;
   content: string;
   image: string;
   tags: string[];
@@ -46,7 +47,7 @@ const Post = ({ postData }: PostProps) => {
     <>
       {postData.map((postItem: PostData) => (
         <div
-          key={postItem.id}
+          key={postItem._id}
           className="flex flex-col items-center justify-center flex-wrap mb-6 relative
         after:content-[''] after:absolute after:h-full 
         after:w-full after:bg-gradient-to-r 
@@ -97,7 +98,7 @@ const Post = ({ postData }: PostProps) => {
                 </Link>
               </div>
               <p className="text-sm text-gray-400 h-16 overflow-hidden">
-                {postItem.content}
+                {postItem.slug}
               </p>
               <div className="h-14 overflow-hidden">
               {postItem.tags.map((tag) => (

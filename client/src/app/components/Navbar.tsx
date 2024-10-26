@@ -17,33 +17,33 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <a href="/" className="text-white text-xl font-bold">
-          Kernel Hub
+        <a href="/" className="text-white text-3xl font-bold">
+          Kernel <span className="text-[#AAFFA9]">Hub</span>
         </a>
         <ul className="flex space-x-4">
           <li>
-            <a href="/" className="text-white border-[#11FFBD] border-b-4">
+            <a href="/" className="text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500">
               Home
             </a>
           </li>
 
           <li>
-            <a href="/services" className="text-white hover:text-gray-300">
+            <a href="/services" className="text-gray-400 hover:text-yellow-300">
               Resources
             </a>
           </li>
           <li>
-            <a href="/contact" className="text-white hover:text-gray-300">
+            <a href="/contact" className="text-gray-400 hover:text-yellow-300">
               Community
             </a>
           </li>
           <li>
-            <a href="/contact" className="text-white hover:text-gray-300">
+            <a href="/contact" className="text-gray-400 hover:text-yellow-300">
               Feedback
             </a>
           </li>
           <li>
-            <a href="/about" className="text-white hover:text-gray-300">
+            <a href="/about" className="text-gray-400 hover:text-yellow-300">
               About
             </a>
           </li>

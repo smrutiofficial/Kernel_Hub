@@ -5,16 +5,22 @@ import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/footer";
 import axios from "axios";
-import Image from "next/image";
+// import Image from "next/image";
+import moment from "moment";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [user, setUser] = useState<any>(null); // To store user info, including profile picture
-  const [comment, setComment] = useState(""); // For new comment input
-  const [comments, setComments] = useState<any[]>([]); // To store all comments
+  const [user, setUser] = useState<any>(null);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState<any[]>([]);
   const [paramid, setparamid] = useState("");
 
   const [profile, setProfile] = useState({
@@ -32,9 +38,14 @@ export default function PostPage({ params }: { params: { id: string } }) {
         }
         const data = await res.json();
         setPost(data);
+
         setLoading(false);
       } catch (err) {
-        setError(err.message);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred.");
+        }
         setLoading(false);
       }
     };
@@ -98,12 +109,13 @@ export default function PostPage({ params }: { params: { id: string } }) {
   const handlePostComment = async () => {
     const token = localStorage.getItem("token");
     if (!comment || !token) return;
-  
+
     try {
       await axios.post(
         `http://localhost:5000/api/comments/`,
         {
           body: comment,
+          // time:
           postId: params.id,
         },
         {
@@ -112,20 +124,19 @@ export default function PostPage({ params }: { params: { id: string } }) {
           },
         }
       );
-  
+
       // Refetch comments
       const res = await fetch(`http://localhost:5000/api/comments/${paramid}`);
       if (res.ok) {
         const data = await res.json();
         setComments(data);
       }
-  
+
       setComment(""); // Clear the textarea
     } catch (err) {
       console.error("Failed to post comment", err);
     }
   };
-  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -133,35 +144,70 @@ export default function PostPage({ params }: { params: { id: string } }) {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-4">
+      <div className="container w-[60%] mx-auto px-6 py-16">
         {post ? (
           <>
-            <p>Date: {new Date(post.timestamp).toLocaleDateString()}</p>
-            <h1 className="text-4xl font-bold">{post.title}</h1>
-            <div className="bg-gray-500 w-2/3 mt-6 rounded-md h-[32rem] overflow-hidden">
+            <p className="text-gray-400 mb-2 capitalize">{post.slug}</p>
+            <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+            <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
+              {moment(post.timestamp).format("Do MMM YYYY")}
+            </p>
+
+            <div
+              className=" 
+              flex flex-col h-[32rem] mt-8 items-center justify-center flex-wrap mb-6 relative
+        after:content-[''] after:absolute after:h-full 
+        after:w-full after:bg-gradient-to-r 
+
+        after:via-transparent 
+        after:from-gray-900 
+        after:to-gray-900
+
+        after:t-1/2 after:l-1/2 
+        after:translate-1/2 after:-z-10 p-[0.5rem] after:rounded-md 
+        before:content-[''] before:absolute before:h-full 
+        before:w-full before:bg-gradient-to-r  
+
+        before:via-transparent 
+      before:from-[#A5FECB] 
+      before:to-[#A5FECB]
+  
+
+        before:t-1/2 before:l-1/2 
+        before:translate-1/2 before:-z-10 before:rounded-md before:blur-3xl
+            "
+            >
+              <div className="h-full w-full bg-gray-800"></div>
               {/* <Image src="" alt="" layout="fill" objectFit="cover" /> */}
             </div>
 
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 flex gap-4">
               {post.tags.map((tag: string) => (
                 <button
                   key={tag}
-                  className="border-2 border-[#AAFFA9] rounded-md mb-4 py-2 px-4"
+                  className="border-2 border-[#AAFFA9] text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max rounded-md mb-4 py-2 px-4"
                 >
                   {tag}
                 </button>
               ))}
             </div>
-            <p className="mt-4 w-2/3">{post.content}</p>
+            <div className="">
+              <ReactMarkdown  remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]} 
+                className="prose prose-lg prose-slate text-white">{post.content}
+              </ReactMarkdown>
+            </div>
+
+            {/* <p className="mt-4 w-full">{post.content}</p> */}
 
             {/* User Profile Picture and Comment Input */}
             <div className="mt-6 flex items-center ">
-              <div className="flex flex-col w-2/3">
+              <div className="flex flex-col w-full">
                 <div className="mb-6 flex flexrow gap-6 items-center">
                   {/* user profile */}
                   <div className="bg-gray-500 h-16 w-16 rounded-full"></div>
                   <div className="">
-                    <p className="capitalize font-bold tracking-wider text-lg text-gray-400">
+                    <p className="capitalize font-bold tracking-wider text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
                       {profile.name}
                     </p>
                     <p className="text-gray-500">{profile.email}</p>
@@ -189,9 +235,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
               {comments.length > 0 ? (
                 comments.map((cmt) => (
                   <div key={cmt._id} className="py-2">
-                    <p className="font-semibold">
-                      {cmt.author?.name || "Unknown"}
-                    </p>
+                    <div className="flex flex-row gap-4">
+                      <p className="font-semibold text-[#AAFFA9] capitalize">
+                        {cmt.author?.name || "Unknown"}
+                      </p>
+                      <p>{moment(cmt.createdAt).fromNow()}</p>
+                    </div>
                     <p>{cmt.body}</p>
                   </div>
                 ))

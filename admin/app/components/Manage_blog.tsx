@@ -98,8 +98,8 @@ const ManageBlog = () => {
 
           {blogPosts.map((post) => (
             <div
-              key={post.id}
-              onMouseEnter={() => setHoveredPostId(post.id)}
+              key={post._id}
+              onMouseEnter={() => setHoveredPostId(post._id)}
               onMouseLeave={() => setHoveredPostId(null)}
               className="flex mt-2 flex-row justify-between hover:border hover:bg-lime-100 hover:bg-opacity-10 hover:border-gray-500 border border-gray-600 rounded-md relative transition-all duration-300 ease-in-out cursor-pointer"
             >
@@ -113,7 +113,7 @@ const ManageBlog = () => {
                 <div
                   className={`border py-1 px-2 rounded-md border-gray-500
               ${
-                hoveredPostId === post.id ? "bg-yellow-400 bg-opacity-50 text-gray-100" : ""
+                hoveredPostId === post._id ? "bg-yellow-400 bg-opacity-50 text-gray-100" : ""
               } `}
                 >
                   <p>{new Date(post.createdAt).toLocaleDateString("pt-BR")}</p>
@@ -129,11 +129,11 @@ const ManageBlog = () => {
                   }}
 
                   className={`h-[70%] w-8 rounded-md p-1 ${
-                    hoveredPostId === post.id
+                    hoveredPostId === post._id
                       ? "bg-[#AAFFA9] text-gray-700"
                       : "hover:bg-[#AAFFA9]"
                   } ${
-                    hoveredPostId === post.id
+                    hoveredPostId === post._id
                       ? "text-gray-700"
                       : "hover:text-gray-700"
                   }`}
@@ -141,7 +141,7 @@ const ManageBlog = () => {
                 <MdDelete
                   onClick={() => handleDelete(post._id)}
                   className={`h-[70%] w-8 p-1 rounded-md ${
-                    hoveredPostId === post.id
+                    hoveredPostId === post._id
                       ? "bg-red-400 text-gray-700"
                       : "hover:bg-red-400 hover:text-gray-700"
                   }`}
