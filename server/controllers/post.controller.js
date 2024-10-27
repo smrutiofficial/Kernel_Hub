@@ -2,7 +2,8 @@ const Post = require("../models/Post.model.js");
 
 // Create a post
 const createPost = async (req, res) => {
-  const { title, slug, image, tags, content } = req.body;
+  const { title, slug, tags, content } = req.body;
+  const image = req.file ? `/public/temp/${req.file.filename}` : "";
 
   try {
     // Check if all required fields are present
@@ -100,11 +101,12 @@ const getPostById = async (req, res) => {
 // Update an existing post
 const updatePost = async (req, res) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title, content, slug, tags } = req.body;
+  const image = req.file ? `/public/temp/${req.file.filename}` : "";
   try {
     const updatedPost = await Post.findByIdAndUpdate(
       id,
-      { title, content },
+      { title, content, slug, tags, ...(image && { image }) },
       { new: true }
     );
     if (!updatedPost)

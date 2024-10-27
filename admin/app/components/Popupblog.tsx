@@ -84,7 +84,7 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst, cpost,blogPo
         popupst === "block" ? "translate-y-0" : "translate-y-[-100%]"
       }`}
     >
-      <div className="p-10 w-full">
+      <div className="p-10 w-full overflow-y-scroll h-[99%]">
         <div className="flex flex-row justify-between">
           <p className="text-xl flex flex-row gap-2 items-center ">
             {" "}
@@ -125,7 +125,7 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst, cpost,blogPo
                 placeholder="Enter Post Title"
                 id="title"
                 defaultValue={post?.title || ''} // Assuming post.title is the title of the post
-                className="mt-1 border-2 border-gray-500 font-bold px-10 w-2/3 h-16 bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
+                className="mt-1 border-2 border-gray-500 font-bold px-10 w-[90%] h-16 bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
               />
             </div>
             <div className="w-full flex flex-col items-center">
@@ -134,10 +134,10 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst, cpost,blogPo
                 placeholder="Enter Slug For Post"
                 id="slug"
                 defaultValue={post?.slug || ''} // Assuming post.slug is the slug of the post
-                className="mt-1 w-2/3 resize-none h-28 py-4 border-2 border-gray-500 px-10 font-bold bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
+                className="mt-1 w-[90%] resize-none h-28 py-4 border-2 border-gray-500 px-10 font-bold bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
               />
             </div>
-            <div className="w-2/3 flex-row items-center gap-4 flex">
+            <div className="w-[90%] flex-row items-center gap-4 flex">
               <div className="w-full flex flex-row  items-center">
                 <input
                   type="file"
@@ -189,16 +189,18 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst, cpost,blogPo
                 name="content"
                 rows={3}
                 defaultValue={post?.content || ''} // Assuming post.content is the content of the post
-                className="mt-1 border-2 border-gray-500 px-10 py-4 font-bold w-2/3 h-[12rem] block resize-none bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
+                className="mt-1 border-2 border-gray-500 px-10 py-4 font-bold w-[90%] h-[60rem] block resize-none bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
                 placeholder="Write your blog content here im markdown ...."
               ></textarea>
             </div>
+            <div className="w-[90%] flex items-center justify-end">
             <button
               type="submit"
-              className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-2/3 text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
+              className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-[25%] text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
             >
               Update
             </button>
+            </div>
           </form>
         </div>
       </div>
