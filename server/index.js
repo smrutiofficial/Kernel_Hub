@@ -18,6 +18,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 // Middleware to parse incoming JSON
 app.use(express.json());
+app.use(express.static("public"))
 
 // Define routes
 app.use("/api/auth", require("./routers/auth.route.js"));

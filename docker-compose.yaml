@@ -37,7 +37,7 @@ services:
     networks:
       - app-network
     restart: unless-stopped
-    command: npm run start # Use your development command if you want hot-reloading
+    command: npm run dev # Use your development command if you want hot-reloading
 
   client:
     build:

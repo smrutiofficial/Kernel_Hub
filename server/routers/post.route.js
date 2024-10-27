@@ -1,5 +1,5 @@
 const express = require("express");
-const { upload } = require("../middlewares/upload.middlewares.js"); 
+const { upload } = require("../middlewares/upload.middlewares.js");
 
 const {
   createPost,
@@ -16,17 +16,7 @@ const router = express.Router();
 router.get("/", getPosts);
 // Create a post
 // Create a post with image upload
-router.post(
-  "/newpost",
-  upload.single("image"),
-  (req, res, next) => {
-    if (req.fileValidationError) {
-      return res.status(400).json({ error: req.fileValidationError });
-    }
-    next();
-  },
-  createPost
-);
+router.post("/newpost", upload.single("image"), createPost);
 // Get a specific post by ID
 router.get("/:id", getPostById);
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import { MdNewLabel } from "react-icons/md";
 
 const Newblog = () => {
-  const [image, setImage] = useState<string | null>(null); // Specify type as string | null
+  const [image, setImage] = useState<File | null>(null); // Specify type as string | null
   const [filename, setFilename] = useState("No file chosen yet...");
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
@@ -14,7 +14,7 @@ const Newblog = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFilename(e.target.files[0].name);
-      setImage(URL.createObjectURL(e.target.files[0]));
+      setImage(e.target.files[0]); 
     }
   };
 
@@ -22,13 +22,21 @@ const Newblog = () => {
     e.preventDefault(); // Prevent the default form submission behavior
     try {
 
-      const formData = {
-        image: image || "", 
-        title: title,
-        slug: slug,
-        tags: tags ? tags.split(",").map(tag => tag.trim()) : [], // Array of tags
-        content: content,
-      };
+      // const formData = {
+      //   image: image || "", 
+      //   title: title,
+      //   slug: slug,
+      //   tags: tags ? tags.split(",").map(tag => tag.trim()) : [], // Array of tags
+      //   content: content,
+      // };
+      // console.log(formData);
+      const formData = new FormData();
+      formData.append("image", image as Blob); // Ensure image is not null
+      formData.append("title", title);
+      formData.append("slug", slug);
+      formData.append("tags", tags);
+      formData.append("content", content);
+      
       console.log(formData);
       
       await axios.post("http://localhost:5000/api/posts/newpost", formData);
@@ -49,11 +57,11 @@ const Newblog = () => {
       <p className="text-xl flex items-center gap-2 "><MdNewLabel className="text-2xl"/>New Blog <span>/</span></p>
       {image && (
         <div className="h-36 w-48 rounded-md overflow-hidden bg-gray-800 absolute mt-52">
-          <Image src={image} alt="" layout="fill" objectFit="cover" />
+          <Image src={URL.createObjectURL(image)} alt="" layout="fill" objectFit="cover" />
         </div>
       )}
       <div className="flex flex-col items-center w-full mt-10">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full items-center">
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="flex flex-col gap-4 w-full items-center">
           <div className="w-full flex flex-col items-center">
             <input
               type="text"

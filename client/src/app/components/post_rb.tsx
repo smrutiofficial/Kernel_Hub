@@ -51,7 +51,7 @@ const Post_rb = () => {
         <div key={postData[0].id} className="bg-gray-900 rounded-lg shadow-md p-4 max-h-[40rem]">
           <div className="bg-gray-700 w-full h-[22rem] rounded-md overflow-hidden">
           <Image 
-          src={postData[0].image}
+          src="http://localhost:5000/temp/1730053295652-89300473.png"
           // src=""
           alt={`Cover for ${postData[0].title}`} 
           width={100}

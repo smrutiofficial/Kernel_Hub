@@ -58,8 +58,8 @@ const Post = ({ postData }: PostProps) => {
           <div className="w-full h-[13rem]">
             <div className="overflow-hidden bg-gray-700 h-full rounded-tl-lg rounded-tr-lg">
               <Image
-                src=""
-                alt={`Cover for ${postItem.title}`}
+                src={`http://localhost:5000/temp/1730053295652-89300473.png`}
+                alt={`Cover for ${postItem.image}`}
                 width={100}
                 height={100}
                 className="w-full h-full object-cover"

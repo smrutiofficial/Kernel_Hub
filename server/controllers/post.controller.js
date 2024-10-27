@@ -2,35 +2,34 @@ const Post = require("../models/Post.model.js");
 
 // Create a post
 const createPost = async (req, res) => {
-  const { title, slug, tags, content } = req.body;
-  const image = req.file ? `/public/temp/${req.file.filename}` : "";
-
   try {
-    // Check if all required fields are present
-    if (!title || !slug || !tags || !content) {
-      return res.status(400).json({ msg: "Please fill in all fields" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded." });
     }
 
-    // Check if tags is an array
-    if (!Array.isArray(tags)) {
-      return res.status(400).json({ msg: "Tags must be an array" });
-    }
+    const { title, slug, tags, content } = req.body;
+    const imagePath = req.file.path; // Adjust if needed
 
-    // Create a new post
+    console.log("Image Path:", imagePath); // Log the image path for debugging
+
     const newPost = new Post({
       title,
       slug,
-      image,
-      tags,
+      tags: tags.split(",").map((tag) => tag.trim()),
       content,
+      image: imagePath,
     });
 
+    // console.log(newPost);
+    
+    // Add your logic to save `newPost` to the database here
     // Save the post
     const post = await newPost.save();
     res.json(post);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).json({ message: "Error creating post", error });
   }
 };
 
