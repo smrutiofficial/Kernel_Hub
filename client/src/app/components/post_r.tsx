@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import Image from "next/image";
+import moment from "moment";
+import Link from "next/link";
 
 // Define the type for Post data
 interface PostData {
+  _id:number;
   id: number;
   title: string;
   content: string;
@@ -39,27 +42,6 @@ const Postr = ({ pid }: PostProps) => {
     fetchData();
   }, [pid]);
 
-  function timeAgo(date: Date) {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-
-    let interval = Math.floor(seconds / 31536000);
-    if (interval >= 1) return `${interval} year${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 2592000);
-    if (interval >= 1) return `${interval} month${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 86400);
-    if (interval >= 1) return `${interval} day${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 3600);
-    if (interval >= 1) return `${interval} hour${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 60);
-    if (interval >= 1)
-      return `${interval} minute${interval > 1 ? "s" : ""} ago`;
-
-    return `${Math.floor(seconds)} seconds ago`;
-  }
   return (
     <>
       {postData && (
@@ -79,13 +61,16 @@ const Postr = ({ pid }: PostProps) => {
           <div className="w-1/2 py-4 pr-4 overflow-hidden">
             <div className="bg-gray-800 p-4 h-full rounded-tr-lg rounded-br-lg">
               {/* Content for the first column */}
-              <div className="flex flex-row gap-4 justify-between items-start">
+              <div >
+                <Link href={`/blog/${postData._id}`} className="flex flex-row gap-4 justify-between items-start"
+                >
                 <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
                   {postData.title}
                 </h1>
                 <p className="text-3xl">
                   <FaArrowTrendUp />
                 </p>
+                </Link>
               </div>
               <p className="h-20 py-1 overflow-hidden">{postData.content}</p>
               <div className="h-14 overflow-hidden">
@@ -132,7 +117,7 @@ const Postr = ({ pid }: PostProps) => {
                     />
                   </svg>
                   <p className="text-gray-400">
-                    {timeAgo(new Date(postData.timestamp))}
+                  {moment(postData.timestamp).format("Do MMM YYYY")}
                   </p>
                 </span>
               </div>

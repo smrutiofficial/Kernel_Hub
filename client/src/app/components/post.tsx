@@ -1,6 +1,7 @@
 import { FaArrowTrendUp } from "react-icons/fa6";
 import Image from "next/image";
 import Link from "next/link";
+import moment from "moment";
 // import { useEffect, useState } from 'react'; // Added useState hook
 
 // Define the type for Post data
@@ -22,27 +23,7 @@ interface PostProps {
 }
 
 const Post = ({ postData }: PostProps) => {
-  function timeAgo(date: Date) {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-
-    let interval = Math.floor(seconds / 31536000);
-    if (interval >= 1) return `${interval} year${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 2592000);
-    if (interval >= 1) return `${interval} month${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 86400);
-    if (interval >= 1) return `${interval} day${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 3600);
-    if (interval >= 1) return `${interval} hour${interval > 1 ? "s" : ""} ago`;
-
-    interval = Math.floor(seconds / 60);
-    if (interval >= 1)
-      return `${interval} minute${interval > 1 ? "s" : ""} ago`;
-
-    return `${Math.floor(seconds)} seconds ago`;
-  }
+  
   return (
     <>
       {postData.map((postItem: PostData) => (
@@ -145,7 +126,7 @@ const Post = ({ postData }: PostProps) => {
                     />
                   </svg>
                   <p className="text-gray-400">
-                    {timeAgo(new Date(postItem.timestamp))}
+                    {moment(postItem.timestamp).format("Do MMM YYYY")}
                   </p>
                 </span>
               </div>

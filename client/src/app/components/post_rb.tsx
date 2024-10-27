@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import Postr from "./post_r";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import Image from "next/image";
+import moment from "moment";
+import Link from "next/link";
 
 interface PostData {
+  _id:number;
   id: number;
   title: string;
   content: string;
@@ -33,26 +36,6 @@ const Post_rb = () => {
     fetchData();
   }, [ ]);
 
-  function timeAgo(date: Date) {
-    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
-  
-    let interval = Math.floor(seconds / 31536000);
-    if (interval >= 1) return `${interval} year${interval > 1 ? 's' : ''} ago`;
-  
-    interval = Math.floor(seconds / 2592000);
-    if (interval >= 1) return `${interval} month${interval > 1 ? 's' : ''} ago`;
-  
-    interval = Math.floor(seconds / 86400);
-    if (interval >= 1) return `${interval} day${interval > 1 ? 's' : ''} ago`;
-  
-    interval = Math.floor(seconds / 3600);
-    if (interval >= 1) return `${interval} hour${interval > 1 ? 's' : ''} ago`;
-  
-    interval = Math.floor(seconds / 60);
-    if (interval >= 1) return `${interval} minute${interval > 1 ? 's' : ''} ago`;
-  
-    return `${Math.floor(seconds)} seconds ago`;
-  }
 
   return (
     <div>
@@ -76,13 +59,15 @@ const Post_rb = () => {
           </div>
 
           <div className="p-4">
-          <div className="flex flex-row gap-4 justify-between items-center">
+          <div className="">
+            <Link href={`/blog/${postData[0]._id}`} className="flex flex-row gap-4 justify-between items-start">
                 <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
                   {postData[0].title}
                 </h1>
                 <p className="text-3xl">
                   <FaArrowTrendUp />
                 </p>
+            </Link>
               </div>
             <p className="text-md h-12 overflow-hidden">
               {postData[0].content}
@@ -126,7 +111,7 @@ const Post_rb = () => {
                   />
                 </svg>
                 <p className="text-gray-400">
-                {timeAgo(new Date(postData[0].timestamp))}
+                {moment(postData[0].timestamp).format("Do MMM YYYY")}
                 </p>
               </span>
             </div>

@@ -16,7 +16,7 @@ export default function Home() {
   };
   return (
     <>
-      <div className="h-screen w-screen flex flex-row overflow-hidden">
+      <div className="h-screen w-screen flex flex-row overflow-hidden relative">
         <Sidebar handlecontents={handleContents} />
         <div className="bg-gray-700 w-[80%] h-full">
           {/* contents */}

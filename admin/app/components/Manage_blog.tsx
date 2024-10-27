@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 import Popupblog from "./Popupblog";
 import { SiGoogletagmanager } from "react-icons/si";
 import Pagination from "./Pagination";
+import moment from "moment";
 
 interface BlogPost {
   _id:string;
@@ -116,7 +117,7 @@ const ManageBlog = () => {
                 hoveredPostId === post._id ? "bg-yellow-400 bg-opacity-50 text-gray-100" : ""
               } `}
                 >
-                  <p>{new Date(post.createdAt).toLocaleDateString("pt-BR")}</p>
+                  <p>{moment(post.createdAt).format("Do MMM YYYY")}</p>
                 </div>
                 {/* <p>Updated At: {new Date(post.updatedAt).toLocaleDateString()}</p> */}
               </div>

@@ -30,9 +30,13 @@ const Sidebar = ({
   };
 
   return (
-    <div className="bg-gray-800 w-[20%] h-full flex flex-col items-center justify-between py-16">
-      <div className="w-full flex flex-col items-center">
-      <div className="">
+    
+    <div className="bg-gray-800 w-[20%] h-full flex flex-col items-center justify-between py-16 overflow-hidden relative">
+      <div className="w-full flex flex-col items-center relative">
+            <div className="h-40 w-40 bg-emerald-500 blur-[15rem] absolute -z-9 top-10 left-0"></div>
+            <div className="h-40 w-40 bg-[#AAFFA9] blur-[15rem] absolute -z-2 -bottom-40 right-0"></div>
+
+      <div className="relative z-10">
         <p className="text-3xl font-bold mb-8">
           Kernal <span className="text-[#AAFFA9]">Hub</span>
         </p>
@@ -104,7 +108,8 @@ const Sidebar = ({
 
       <div className="w-full flex items-center flex-col">
         <button
-          className="border-2 w-2/3 flex items-center hover:bg-red-400 justify-center font-bold border-gray-700 gap-6 rounded-md py-3 text-white mb-4"
+          className="border-2 w-2/3 flex items-center hover:bg-red-400 bg-opacity-100 hover:bg-opacity-70 
+          justify-center font-bold border-gray-700 gap-6 rounded-md py-3 text-white mb-4"
         >
           <IoLogOut className="text-3xl"/>
           Logout

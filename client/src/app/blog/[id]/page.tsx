@@ -191,12 +191,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
                 </button>
               ))}
             </div>
-            <div className="">
+            <div className="w-full relative">
               <ReactMarkdown  remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeHighlight]} 
-                className="prose prose-lg prose-slate text-white">{post.content}
+                className="prose prose-lg prose-slate text-white w-full min-w-full p-4">{post.content}
               </ReactMarkdown>
-            </div>
+            </div> 
 
             {/* <p className="mt-4 w-full">{post.content}</p> */}
 
