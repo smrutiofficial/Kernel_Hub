@@ -1,5 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { FaArrowTrendUp } from "react-icons/fa6";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
 // import { useEffect, useState } from 'react'; // Added useState hook
@@ -57,8 +58,8 @@ const Post = ({ postData }: PostProps) => {
           {" "}
           <div className="w-full h-[13rem]">
             <div className="overflow-hidden bg-gray-700 h-full rounded-tl-lg rounded-tr-lg">
-              <Image
-                src={`http://localhost:5000/temp/1730053295652-89300473.png`}
+              <img
+                src={`http://localhost:5000/temp/${postItem.image}`}
                 alt={`Cover for ${postItem.image}`}
                 width={100}
                 height={100}

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React,{useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { MdNewLabel } from "react-icons/md";
 
@@ -10,20 +10,20 @@ const Newblog = () => {
   const [slug, setSlug] = useState("");
   const [tags, setTags] = useState("");
   const [content, setContent] = useState("");
+  const [tagarray, setTagarray] = useState<string[]>([]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFilename(e.target.files[0].name);
-      setImage(e.target.files[0]); 
+      setImage(e.target.files[0]);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent the default form submission behavior
     try {
-
       // const formData = {
-      //   image: image || "", 
+      //   image: image || "",
       //   title: title,
       //   slug: slug,
       //   tags: tags ? tags.split(",").map(tag => tag.trim()) : [], // Array of tags
@@ -34,34 +34,46 @@ const Newblog = () => {
       formData.append("image", image as Blob); // Ensure image is not null
       formData.append("title", title);
       formData.append("slug", slug);
-      formData.append("tags", tags);
+      formData.append("tags", tagarray.join(","));
       formData.append("content", content);
-      
+
       console.log(formData);
-      
+
       await axios.post("http://localhost:5000/api/posts/newpost", formData);
-      alert("Your post successfully published")
+      alert("Your post successfully published");
       // Handle success response
-    } catch (error: unknown) { // Change type to unknown
-      if (axios.isAxiosError(error)) { // Check if it's an Axios error
-        console.error("Error posting data:", error.response?.data.posts || error.message);
+    } catch (error: unknown) {
+      // Change type to unknown
+      if (axios.isAxiosError(error)) {
+        // Check if it's an Axios error
+        console.error(
+          "Error posting data:",
+          error.response?.data.posts || error.message
+        );
       } else {
         console.error("Unexpected error:", error);
       }
       // Handle error response
     }
   };
-
+  const handeltags = (newItem: string) => {
+    console.log("new one");
+    setTagarray((prevItems) => [...prevItems, newItem]);
+    console.log(tagarray);
+  };
   return (
     <div className="p-10 w-full h-[99%] overflow-scroll">
-      <p className="text-xl flex items-center gap-2 "><MdNewLabel className="text-2xl"/>New Blog <span>/</span></p>
-      {image && (
-        <div className="h-36 w-48 rounded-md overflow-hidden bg-gray-800 absolute mt-52">
-          <Image src={URL.createObjectURL(image)} alt="" layout="fill" objectFit="cover" />
-        </div>
-      )}
+      <p className="text-xl flex items-center gap-2 ">
+        <MdNewLabel className="text-2xl" />
+        New Blog <span>/</span>
+      </p>
+
       <div className="flex flex-col items-center w-full mt-10">
-        <form onSubmit={handleSubmit} encType="multipart/form-data" className="flex flex-col gap-4 w-full items-center">
+        <form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          className="flex flex-col gap-4 w-full items-center"
+        >
           <div className="w-full flex flex-col items-center">
             <input
               type="text"
@@ -85,6 +97,28 @@ const Newblog = () => {
           </div>
           <div className="w-[90%] flex-row items-center gap-4 flex">
             <div className="w-full flex flex-row  items-center">
+              {image && (
+                <div className=" relative">
+                  <div className="h-36 w-[18rem] flex justify-center items-center mr-4 rounded-md relative overflow-hidden bg-gray-800 object-cover">
+                    <Image
+                      src={URL.createObjectURL(image)}
+                      alt=""
+                      width={100}
+                      height={100}
+                      className="object-cover relative w-[95%] h-[90%]"
+                    />
+                  </div>
+                  {image.size > 5 * 1024 * 1024 ? (
+                    <p className="text-sm text-red-500 mt-2 bg-gray-800 absolute bottom-2 right-8 font-bold">
+                      File must be under 5 MB
+                    </p>
+                  ) : (
+                    <p className="text-sm text-[#AAFFA9] mt-2 bg-gray-800 absolute bottom-2 right-8 font-bold">
+                      {(image.size / 1024).toFixed(2)} KB
+                    </p>
+                  )}
+                </div>
+              )}
               <input
                 type="file"
                 name="image"
@@ -110,6 +144,13 @@ const Newblog = () => {
               </div>
             </div>
             <div className="w-full flex flex-col items-end">
+              <div className="flex flex-row justify-center items-center gap-4 w-full">
+                {tagarray.map((itemof,index) => (
+                  <p key={index} className="border border-[#AAFFA9] py-2 px-4 rounded-md mb-2">
+                    {itemof}
+                  </p>
+                ))}
+              </div>
               <select
                 id="tags"
                 name="tags"
@@ -118,9 +159,15 @@ const Newblog = () => {
                 className="mt-1 border-2 border-dashed border-gray-400 px-10 w-full block h-12 bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
               >
                 <option value="">Select a tag</option>
-                <option value="tag1">Tag 1</option>
-                <option value="tag2">Tag 2</option>
-                <option value="tag3">Tag 3</option>
+                <option value="tag1" onClick={() => handeltags("tag1")}>
+                  tag1
+                </option>
+                <option value="tag2" onClick={() => handeltags("tag2")}>
+                  tag2
+                </option>
+                <option value="tag3" onClick={() => handeltags("tag3")}>
+                  tag3
+                </option>
                 {/* Add more options as needed */}
               </select>
             </div>
@@ -138,12 +185,12 @@ const Newblog = () => {
             ></textarea>
           </div>
           <div className="w-[90%] flex justify-end">
-          <button
-            type="submit" // Changed from onClick to type="submit"
-            className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-[25%] text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
-          >
-            Publish
-          </button>
+            <button
+              type="submit" // Changed from onClick to type="submit"
+              className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-[25%] text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
+            >
+              Publish
+            </button>
           </div>
         </form>
       </div>

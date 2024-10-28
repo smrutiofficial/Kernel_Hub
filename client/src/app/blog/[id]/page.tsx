@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -177,7 +178,14 @@ export default function PostPage({ params }: { params: { id: string } }) {
         before:translate-1/2 before:-z-10 before:rounded-md before:blur-3xl
             "
             >
-              <div className="h-full w-full bg-gray-800"></div>
+              <img
+                src={`http://localhost:5000/temp/${post.image}`}
+                alt=""
+                width={100}
+                height={100}
+                className="w-full h-full object-cover"
+              />
+              {/* <div className="h-full w-full bg-gray-800"></div> */}
               {/* <Image src="" alt="" layout="fill" objectFit="cover" /> */}
             </div>
 

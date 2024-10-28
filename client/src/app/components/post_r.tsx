@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
 import { FaArrowTrendUp } from "react-icons/fa6";
-import Image from "next/image";
+// import Image from "next/image";
 import moment from "moment";
 import Link from "next/link";
 
@@ -49,12 +50,12 @@ const Postr = ({ pid }: PostProps) => {
           <div className="w-1/2 py-4 pl-4 overflow-hidden">
             {/* Content for the first div */}
             <div className=" bg-gray-700 h-[17.5rem] overflow-hidden object-cover rounded-tl-lg rounded-bl-lg">
-              <Image
-                src=""
+              <img
+                src={`http://localhost:5000/temp/${postData.image}`}
                 alt={`Cover for ${postData.title}`}
                 width={100}
                 height={100}
-                className="w-full h-full"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
