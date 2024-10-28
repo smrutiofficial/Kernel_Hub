@@ -5,7 +5,7 @@ const app = express();
 const cors = require("cors");
 // Enable CORS for requests from localhost:3000
 app.use(cors({
-  origin: "https://kernel-hub.vercel.app", // specify exact origin
+  origin: "*", // specify exact origin
   methods: "GET,POST,PUT,DELETE",
   allowedHeaders: "Content-Type, Authorization",
 }));
