@@ -1,7 +1,7 @@
-import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
-import multer from "multer";
-import dotenv from "dotenv";
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const multer = require("multer");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "uploads", 
+    folder: "uploads",
     allowedFormats: ["jpeg", "jpg", "png", "gif"],
   },
 });
@@ -27,4 +27,4 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
 });
 
-export { upload };
+module.exports = { upload };
