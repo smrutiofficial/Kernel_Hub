@@ -4,7 +4,11 @@ const path = require("path");
 const app = express();
 const cors = require("cors");
 // Enable CORS for requests from localhost:3000
-app.use(cors());
+app.use(cors({
+  origin: "https://kernel-hub.vercel.app", // specify exact origin
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type, Authorization",
+}));
 // Load environment variables from .env file
 require('dotenv').config();
 
