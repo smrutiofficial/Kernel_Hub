@@ -203,7 +203,7 @@ const Newblog = () => {
             <button
               type="submit"
               disabled={status === "Loading..."}
-              className={`inline-flex justify-center mt-4 rounded-md border bg-lime-500 border-transparent py-4 text-sm w-[25%] font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              className={`inline-flex justify-center text-gray-800 mt-4 rounded-md border bg-[#AAFFA9] border-transparent py-4 text-sm w-[25%] font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                 status === "Loading..."
                   ? "bg-gray-400 text-gray-600 cursor-not-allowed" // Styling for disabled state
                   : "bg-[#AAFFA9] text-gray-700 hover:bg-emerald-200"
