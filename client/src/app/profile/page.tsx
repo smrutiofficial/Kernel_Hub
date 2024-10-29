@@ -19,7 +19,7 @@ const Page = () => {
 
       if (token) {
         try {
-          const response = await axios.get("http://localhost:5000/api/auth/me", {
+          const response = await axios.get("https://kernel-hub.onrender.com/api/auth/me", {
             headers: {
               "x-auth-token": token,
             },
@@ -56,7 +56,7 @@ const Page = () => {
     
     const token = localStorage.getItem("token"); // Get token from local storage
     try {
-      await axios.put("http://localhost:5000/api/auth/me", profile, {
+      await axios.put("https://kernel-hub.onrender.com/api/auth/me", profile, {
         headers: {
           "x-auth-token": token, // Include the token in the header
         },

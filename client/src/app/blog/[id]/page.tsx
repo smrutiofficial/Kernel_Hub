@@ -33,7 +33,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
     setparamid(params.id);
     const fetchPost = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/posts/${params.id}`);
+        const res = await fetch(`https://kernel-hub.onrender.com/api/posts/${params.id}`);
         if (!res.ok) {
           throw new Error("Failed to fetch post");
         }
@@ -62,7 +62,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
       if (token) {
         try {
           const response = await axios.get(
-            "http://localhost:5000/api/auth/me",
+            "https://kernel-hub.onrender.com/api/auth/me",
             {
               headers: {
                 "x-auth-token": token,
@@ -92,7 +92,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
     const fetchComments = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/comments/${paramid}`
+          `https://kernel-hub.onrender.com/api/comments/${paramid}`
         );
         if (res.ok) {
           const data = await res.json();
@@ -113,7 +113,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
     try {
       await axios.post(
-        `http://localhost:5000/api/comments/`,
+        `https://kernel-hub.onrender.com/api/comments/`,
         {
           body: comment,
           // time:
@@ -127,7 +127,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
       );
 
       // Refetch comments
-      const res = await fetch(`http://localhost:5000/api/comments/${paramid}`);
+      const res = await fetch(`https://kernel-hub.onrender.com/api/comments/${paramid}`);
       if (res.ok) {
         const data = await res.json();
         setComments(data);
@@ -179,7 +179,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
             "
             >
               <img
-                src={`http://localhost:5000/temp/${post.image}`}
+                src={`https://res.cloudinary.com/do0qmdmch/image/upload/${post.image}`}
                 alt=""
                 width={100}
                 height={100}
