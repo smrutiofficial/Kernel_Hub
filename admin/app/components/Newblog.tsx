@@ -39,7 +39,7 @@ const Newblog = () => {
 
       console.log(formData);
 
-      await axios.post("https://kernel-hub.vercel.app/api/posts/newpost", formData);
+      await axios.post("https://kernel-hub.onrender.com/api/posts/newpost", formData);
       alert("Your post successfully published");
       // Handle success response
     } catch (error: unknown) {
