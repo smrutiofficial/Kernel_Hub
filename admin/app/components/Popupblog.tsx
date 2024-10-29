@@ -32,7 +32,7 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst, cpost,blogPo
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/posts/${cpost}`);
+        const response = await axios.get(`https://kernel-hub.onrender.com/api/posts/${cpost}`);
         setPost(response.data); // Assuming the API returns the post data directly
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -62,7 +62,7 @@ const Popupblog: React.FC<PopupblogProps> = ({ popupst, setPopupst, cpost,blogPo
 
     try {
       const imageBuffer = imageFile ? await imageFile.arrayBuffer() : null;
-      const response = await axios.put(`http://localhost:5000/api/posts/${cpost}`, {
+      const response = await axios.put(`https://kernel-hub.onrender.com/api/posts/${cpost}`, {
         title,
         slug,
         content,

@@ -35,7 +35,7 @@ const ManageBlog = () => {
     const fetchBlogPosts = async () => {
       try {
         const response = await axios.get<BlogResponse>(
-          `http://localhost:5000/api/posts?sort=${sortOption}&page=${cpage}`
+          `https://kernel-hub.onrender.com/api/posts?sort=${sortOption}&page=${cpage}`
         );
         setBlogPosts(response.data.posts); // Now correctly accessing posts
         setCpage(response.data.currentPage);
@@ -54,7 +54,7 @@ const ManageBlog = () => {
 
   const handleDelete = async (postId: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/posts/${postId}`);
+      await axios.delete(`https://kernel-hub.onrender.com/api/posts/${postId}`);
       setBlogPosts(blogPosts.filter(post => post._id !== postId));
     } catch (error) {
       console.error("Error deleting blog post:", error);
