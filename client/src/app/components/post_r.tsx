@@ -28,7 +28,7 @@ const Postr = ({ pid }: PostProps) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/posts?sort=newest`
+          `https://kernel-hub.onrender.com/api/posts?sort=newest`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -51,7 +51,7 @@ const Postr = ({ pid }: PostProps) => {
             {/* Content for the first div */}
             <div className=" bg-gray-700 h-[17.5rem] overflow-hidden object-cover rounded-tl-lg rounded-bl-lg">
               <img
-                src={`http://localhost:5000/temp/${postData.image}`}
+                src={`https://res.cloudinary.com/do0qmdmch/image/upload/${postData.image}`}
                 alt={`Cover for ${postData.title}`}
                 width={100}
                 height={100}

@@ -23,7 +23,7 @@ const Post_rb = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/posts?sort=newest"
+          "https://kernel-hub.onrender.com/api/posts?sort=newest"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -57,8 +57,8 @@ const Post_rb = () => {
           >
             <div className="bg-gray-700 w-full h-[22rem] rounded-md overflow-hidden">
               <img
-                src={`http://localhost:5000/temp/${postData[0].image}`}
-                alt={`http://localhost:5000/temp/${postData[0].image}`}
+                src={`https://res.cloudinary.com/do0qmdmch/image/upload/${postData[0].image}`}
+                alt=""
                 width={100}
                 height={100}
                 className="w-full h-full object-cover"

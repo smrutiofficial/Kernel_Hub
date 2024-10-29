@@ -35,7 +35,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/posts?page=${currentPage}&sort=${activeButton}`
+          `https://kernel-hub.onrender.com/api/posts?page=${currentPage}&sort=${activeButton}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");

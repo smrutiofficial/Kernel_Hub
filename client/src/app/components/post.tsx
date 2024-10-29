@@ -59,7 +59,7 @@ const Post = ({ postData }: PostProps) => {
           <div className="w-full h-[13rem]">
             <div className="overflow-hidden bg-gray-700 h-full rounded-tl-lg rounded-tr-lg">
               <img
-                src={`http://localhost:5000/temp/${postItem.image}`}
+                src={`https://res.cloudinary.com/do0qmdmch/image/upload/${postItem.image}`}
                 alt={`Cover for ${postItem.image}`}
                 width={100}
                 height={100}
