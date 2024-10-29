@@ -202,16 +202,15 @@ const Newblog = () => {
           <div className="w-[90%] flex justify-end">
             <button
               type="submit"
-              className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-[25%] text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
+              disabled={status === "Loading..."}
+              className={`inline-flex justify-center mt-4 rounded-md border bg-lime-500 border-transparent py-4 text-sm w-[25%] font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                status === "Loading..."
+                  ? "bg-gray-400 text-gray-600 cursor-not-allowed" // Styling for disabled state
+                  : "bg-[#AAFFA9] text-gray-700 hover:bg-emerald-200"
+              }`}
             >
               {status} {status === "Loading..." && `${progress}%`}
             </button>{" "}
-            <button
-              type="submit"
-              className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-[25%] text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
-            >
-              Publish
-            </button>
           </div>
         </form>
       </div>
