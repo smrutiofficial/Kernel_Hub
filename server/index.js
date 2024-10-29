@@ -3,13 +3,10 @@ const connectDB = require("./db/db");
 const path = require("path");
 const app = express();
 const cors = require("cors");
-// Enable CORS for requests from localhost:3000
-app.use(cors({
-  origin: ['https://kernelhubadmin.vercel.app/', 'http://localhost:3000'],
-  credentials: true,
-}));
+
+app.use(cors());
 // Load environment variables from .env file
-require('dotenv').config();
+require("dotenv").config();
 
 // Connect to MongoDB
 connectDB();
@@ -21,7 +18,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 // Middleware to parse incoming JSON
 app.use(express.json());
-app.use(express.static("public"))
+app.use(express.static("public"));
 
 // Define routes
 app.use("/api/auth", require("./routers/auth.route.js"));
