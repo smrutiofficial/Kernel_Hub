@@ -11,6 +11,8 @@ const Newblog = () => {
   const [tags, setTags] = useState("");
   const [content, setContent] = useState("");
   const [tagarray, setTagarray] = useState<string[]>([]);
+  const [status, setStatus] = useState("Publish");
+  const [progress, setProgress] = useState(0);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -20,32 +22,42 @@ const Newblog = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
+    setStatus("Loading...");
+    setProgress(0);
+
     try {
-      // const formData = {
-      //   image: image || "",
-      //   title: title,
-      //   slug: slug,
-      //   tags: tags ? tags.split(",").map(tag => tag.trim()) : [], // Array of tags
-      //   content: content,
-      // };
-      // console.log(formData);
       const formData = new FormData();
-      formData.append("image", image as Blob); // Ensure image is not null
+      formData.append("image", image as Blob);
       formData.append("title", title);
       formData.append("slug", slug);
       formData.append("tags", tagarray.join(","));
       formData.append("content", content);
 
-      console.log(formData);
+      await axios.post(
+        "https://kernel-hub.onrender.com/api/posts/newpost",
+        formData,
+        {
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const percentCompleted = Math.round(
+                (progressEvent.loaded * 100) / progressEvent.total
+              );
+              setProgress(percentCompleted);
+            } else {
+              // Handle case where total is undefined
+              setProgress(0); // Optionally, keep progress as 0 if the total is undefined
+            }
+          },
+        }
+      );
 
-      await axios.post("https://kernel-hub.onrender.com/api/posts/newpost", formData);
-      alert("Your post successfully published");
-      // Handle success response
+      setStatus("Post");
+      alert("Your post was successfully published");
     } catch (error: unknown) {
-      // Change type to unknown
+      setStatus("Publish");
+      setProgress(0);
       if (axios.isAxiosError(error)) {
-        // Check if it's an Axios error
         console.error(
           "Error posting data:",
           error.response?.data.posts || error.message
@@ -53,9 +65,9 @@ const Newblog = () => {
       } else {
         console.error("Unexpected error:", error);
       }
-      // Handle error response
     }
   };
+
   const handeltags = (newItem: string) => {
     console.log("new one");
     setTagarray((prevItems) => [...prevItems, newItem]);
@@ -145,8 +157,11 @@ const Newblog = () => {
             </div>
             <div className="w-full flex flex-col items-end">
               <div className="flex flex-row justify-center items-center gap-4 w-full">
-                {tagarray.map((itemof,index) => (
-                  <p key={index} className="border border-[#AAFFA9] py-2 px-4 rounded-md mb-2">
+                {tagarray.map((itemof, index) => (
+                  <p
+                    key={index}
+                    className="border border-[#AAFFA9] py-2 px-4 rounded-md mb-2"
+                  >
                     {itemof}
                   </p>
                 ))}
@@ -186,7 +201,13 @@ const Newblog = () => {
           </div>
           <div className="w-[90%] flex justify-end">
             <button
-              type="submit" // Changed from onClick to type="submit"
+              type="submit"
+              className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-[25%] text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
+            >
+              {status} {status === "Loading..." && `${progress}%`}
+            </button>{" "}
+            <button
+              type="submit"
               className="inline-flex justify-center mt-4 rounded-md border border-transparent bg-[#AAFFA9] py-4 text-sm w-[25%] text-gray-700 font-bold shadow-sm hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:border-[#AAFFA9] focus:ring-offset-2"
             >
               Publish
