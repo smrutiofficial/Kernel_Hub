@@ -81,7 +81,6 @@ export default function PostPage({ params }: { params: { id: string } }) {
     };
     fetchProfile();
   }, []);
-
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -97,6 +96,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
     };
     fetchComments();
   }, [paramid]);
+
   useEffect(() => {
     const processContent = async () => {
       if (post?.content) {
@@ -244,11 +244,11 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Write a comment..."
-                  className="w-full resize-none h-40 border px-6 py-6 rounded-md bg-gray-700 focus:border-[#AAFFA9]"
+                  className="w-full resize-none h-40 border-2 border-[#aaffa982] px-6 py-6 rounded-md bg-gray-700 focus:border-[#AAFFA9]"
                 />
                 <button
                   onClick={handlePostComment}
-                  className="mt-4 px-12 py-4 w-max bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
+                  className="mt-8 mb-4 px-12 py-4 w-max bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
                 >
                   {status} {status === "Loading..." && `${progress}%`}
                 </button>
@@ -276,9 +276,9 @@ export default function PostPage({ params }: { params: { id: string } }) {
                       <p className="font-semibold text-[#AAFFA9] capitalize">
                         {cmt.author?.name || "Unknown"}
                       </p>
-                      <p>{moment(cmt.createdAt).fromNow()}</p>
+                      <p className="text-gray-500">{moment(cmt.createdAt).fromNow()}</p>
                     </div>
-                    <p>{cmt.body}</p>
+                    <p className="ml-6 mt-2 capitalize">{cmt.body}</p>
                   </div>
                 ))
               ) : (
