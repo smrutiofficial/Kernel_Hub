@@ -107,7 +107,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
           .use(rehypeFormat)
           .use(rehypeStringify)
           .use(rehypePrettyCode, {
-            theme:"everforest-dark",
+            theme:"tokyo-night",
             transformers: [
               transformerCopyButton({
                 visibility: 'always',
@@ -180,7 +180,30 @@ export default function PostPage({ params }: { params: { id: string } }) {
               {moment(post.timestamp).format("Do MMM YYYY")}
             </p>
 
-            <div className="flex flex-col h-[32rem] mt-8 items-center justify-center flex-wrap mb-6 relative">
+            <div
+              className=" 
+              flex flex-col h-[32rem] mt-8 items-center justify-center flex-wrap mb-6 relative
+        after:content-[''] after:absolute after:h-full 
+        after:w-full after:bg-gradient-to-r 
+
+        after:via-transparent 
+        after:from-gray-900 
+        after:to-gray-900
+
+        after:t-1/2 after:l-1/2 
+        after:translate-1/2 after:-z-10 p-[0.5rem] after:rounded-md 
+        before:content-[''] before:absolute before:h-full 
+        before:w-full before:bg-gradient-to-r  
+
+        before:via-transparent 
+      before:from-[#A5FECB] 
+      before:to-[#A5FECB]
+  
+
+        before:t-1/2 before:l-1/2 
+        before:translate-1/2 before:-z-10 before:rounded-md before:blur-[15rem]
+            "
+            >
               <img
                 src={`${upload_link}/${post.image}`}
                 alt=""
