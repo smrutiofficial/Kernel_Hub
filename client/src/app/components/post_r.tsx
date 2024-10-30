@@ -4,6 +4,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 // import Image from "next/image";
 import moment from "moment";
 import Link from "next/link";
+import {backend_link,upload_link} from "@/app/constants/constant";
 
 // Define the type for Post data
 interface PostData {
@@ -28,7 +29,7 @@ const Postr = ({ pid }: PostProps) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://kernel-hub.onrender.com/api/posts?sort=newest`
+          `${backend_link}/api/posts?sort=newest`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -51,7 +52,7 @@ const Postr = ({ pid }: PostProps) => {
             {/* Content for the first div */}
             <div className=" bg-gray-700 h-[17.5rem] overflow-hidden object-cover rounded-tl-lg rounded-bl-lg">
               <img
-                src={`https://res.cloudinary.com/do0qmdmch/image/upload/${postData.image}`}
+                src={`${upload_link}/${postData.image}`}
                 alt={`Cover for ${postData.title}`}
                 width={100}
                 height={100}

@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import axios from "axios";
 import { MdNewLabel } from "react-icons/md";
+import {backend_link} from "@/app/constants/constant";
 
 const Newblog = () => {
   const [image, setImage] = useState<File | null>(null); // Specify type as string | null
@@ -35,7 +36,7 @@ const Newblog = () => {
       formData.append("content", content);
 
       await axios.post(
-        "https://kernel-hub.onrender.com/api/posts/newpost",
+        `${backend_link}/api/posts/newpost`,
         formData,
         {
           onUploadProgress: (progressEvent) => {

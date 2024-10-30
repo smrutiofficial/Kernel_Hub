@@ -3,6 +3,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 // import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
+import {upload_link} from "@/app/constants/constant"
 // import { useEffect, useState } from 'react'; // Added useState hook
 
 // Define the type for Post data
@@ -59,7 +60,7 @@ const Post = ({ postData }: PostProps) => {
           <div className="w-full h-[13rem]">
             <div className="overflow-hidden bg-gray-700 h-full rounded-tl-lg rounded-tr-lg">
               <img
-                src={`https://res.cloudinary.com/do0qmdmch/image/upload/${postItem.image}`}
+                src={`${upload_link}/${postItem.image}`}
                 alt={`Cover for ${postItem.image}`}
                 width={100}
                 height={100}

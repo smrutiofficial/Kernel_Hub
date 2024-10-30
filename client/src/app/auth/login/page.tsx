@@ -6,6 +6,7 @@ import Bg from "../../image/work.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {backend_link} from "@/app/constants/constant";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://kernel-hub.onrender.com/api/auth/login",
+        `${backend_link}/api/auth/login`,
         { email, password }
       );
       localStorage.setItem("token", response.data.token);

@@ -7,6 +7,7 @@ import Bg from "../../image/berny-transformed.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {backend_link} from "@/app/constants/constant";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -28,7 +29,7 @@ export default function Register() {
     }
 
     try {
-      const res = await axios.post("https://kernel-hub.onrender.com/api/auth/register", {
+      const res = await axios.post(`${backend_link}/api/auth/register`, {
         name,
         email,
         password,

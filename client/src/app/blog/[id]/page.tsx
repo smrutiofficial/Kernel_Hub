@@ -13,6 +13,7 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import {backend_link,upload_link} from "@/app/constants/constant";
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +34,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
     setparamid(params.id);
     const fetchPost = async () => {
       try {
-        const res = await fetch(`https://kernel-hub.onrender.com/api/posts/${params.id}`);
+        const res = await fetch(`${backend_link}/api/posts/${params.id}`);
         if (!res.ok) {
           throw new Error("Failed to fetch post");
         }
@@ -62,7 +63,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
       if (token) {
         try {
           const response = await axios.get(
-            "https://kernel-hub.onrender.com/api/auth/me",
+            `${backend_link}/api/auth/me`,
             {
               headers: {
                 "x-auth-token": token,
@@ -92,7 +93,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
     const fetchComments = async () => {
       try {
         const res = await fetch(
-          `https://kernel-hub.onrender.com/api/comments/${paramid}`
+          `${backend_link}/api/comments/${paramid}`
         );
         if (res.ok) {
           const data = await res.json();
@@ -113,7 +114,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
     try {
       await axios.post(
-        `https://kernel-hub.onrender.com/api/comments/`,
+        `${backend_link}/api/comments/`,
         {
           body: comment,
           // time:
@@ -127,7 +128,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
       );
 
       // Refetch comments
-      const res = await fetch(`https://kernel-hub.onrender.com/api/comments/${paramid}`);
+      const res = await fetch(`${backend_link}/api/comments/${paramid}`);
       if (res.ok) {
         const data = await res.json();
         setComments(data);
@@ -179,7 +180,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
             "
             >
               <img
-                src={`https://res.cloudinary.com/do0qmdmch/image/upload/${post.image}`}
+                src={`${upload_link}/${post.image}`}
                 alt=""
                 width={100}
                 height={100}

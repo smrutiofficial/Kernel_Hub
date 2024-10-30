@@ -6,6 +6,7 @@ import Popupblog from "./Popupblog";
 import { SiGoogletagmanager } from "react-icons/si";
 import Pagination from "./Pagination";
 import moment from "moment";
+import {backend_link} from "@/app/constants/constant";
 
 interface BlogPost {
   _id:string;
@@ -35,7 +36,7 @@ const ManageBlog = () => {
     const fetchBlogPosts = async () => {
       try {
         const response = await axios.get<BlogResponse>(
-          `https://kernel-hub.onrender.com/api/posts?sort=${sortOption}&page=${cpage}`
+          `${backend_link}/api/posts?sort=${sortOption}&page=${cpage}`
         );
         setBlogPosts(response.data.posts); // Now correctly accessing posts
         setCpage(response.data.currentPage);
@@ -54,7 +55,7 @@ const ManageBlog = () => {
 
   const handleDelete = async (postId: string) => {
     try {
-      await axios.delete(`https://kernel-hub.onrender.com/api/posts/${postId}`);
+      await axios.delete(`${backend_link}/api/posts/${postId}`);
       setBlogPosts(blogPosts.filter(post => post._id !== postId));
     } catch (error) {
       console.error("Error deleting blog post:", error);
