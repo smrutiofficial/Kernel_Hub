@@ -174,7 +174,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
           src={bg}
           alt=""
           layout="cover"
-          className="opacity-[3%] -z-10 absolute object-cover w-full h-full"
+          className="opacity-[3%] mix-blend-screen -z-10 absolute object-cover w-full h-full"
         ></Image>
         <div className="container w-[60%] mx-auto px-6 py-12">
           {post ? (
@@ -215,7 +215,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                 <img
                   src={`${upload_link}/${post.image}`}
                   alt=""
-                  className="w-full h-full object-cover"
+                  className="w-[97%] h-[96%] object-cover"
                 />
               </div>
 

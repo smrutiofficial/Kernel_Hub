@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Postr from "./post_r";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import moment from "moment";
 import Link from "next/link";
-import {backend_link,upload_link} from "@/app/constants/constant"
+import {upload_link} from "@/app/constants/constant"
 
 interface PostData {
   _id: number;
   id: number;
   title: string;
+  slug:string;
   content: string;
   image: string;
   tags: string[];
@@ -17,27 +18,12 @@ interface PostData {
   timestamp: string; // or Date if needed
 }
 
-const Post_rb = () => {
-  const [postData, setPostData] = useState<PostData[]>([]);
+interface PostProps {
+  postData: PostData[];
+  // totalpage: (message: string) => void; // Add this line
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${backend_link}/api/posts?sort=newest`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setPostData(data.posts);
-      } catch (error) {
-        console.error("There was a problem with the fetch operation:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+const Post_rb = ({ postData }: PostProps) => {
 
   return (
     <div>
@@ -138,8 +124,7 @@ const Post_rb = () => {
         <div className="bg-gray-900 rounded-lg shadow-md ">
           <div className="flex flex-col justify-center items-center">
             {/*  */}
-            <Postr pid={1} />
-            <Postr pid={2} />
+            <Postr postData={postData} />
             {/*  */}
           </div>
         </div>

@@ -1,14 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FaArrowTrendUp } from "react-icons/fa6";
-// import Image from "next/image";
 import moment from "moment";
 import Link from "next/link";
-import {backend_link,upload_link} from "@/app/constants/constant";
+import { upload_link } from "@/app/constants/constant";
 
 // Define the type for Post data
 interface PostData {
-  _id:number;
+  _id: number;
   id: number;
   title: string;
   content: string;
@@ -19,41 +18,22 @@ interface PostData {
 }
 
 interface PostProps {
-  pid: number;
+  postData: PostData[];
 }
 
-const Postr = ({ pid }: PostProps) => {
-  const [postData, setPostData] = useState<PostData | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${backend_link}/api/posts?sort=newest`
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setPostData(data.posts[pid]);
-      } catch (error) {
-        console.error("There was a problem with the fetch operation:", error);
-      }
-    };
-
-    fetchData();
-  }, [pid]);
+const Postr = ({ postData }: PostProps) => {
+  // Filter only postData[1] and postData[2]
+  const filteredData = postData.slice(1, 3);
 
   return (
     <>
-      {postData && (
-        <div key={postData.id} className="flex flex-row w-full ">
+      {filteredData.map((post) => (
+        <div key={post.id} className="flex flex-row w-full">
           <div className="w-1/2 py-4 pl-4 overflow-hidden">
-            {/* Content for the first div */}
-            <div className=" bg-gray-700 h-[17.5rem] overflow-hidden object-cover rounded-tl-lg rounded-bl-lg">
+            <div className="bg-gray-700 h-[17.5rem] overflow-hidden object-cover rounded-tl-lg rounded-bl-lg">
               <img
-                src={`${upload_link}/${postData.image}`}
-                alt={`Cover for ${postData.title}`}
+                src={`${upload_link}/${post.image}`}
+                alt={`Cover for ${post.title}`}
                 width={100}
                 height={100}
                 className="w-full h-full object-cover"
@@ -62,28 +42,24 @@ const Postr = ({ pid }: PostProps) => {
           </div>
           <div className="w-1/2 py-4 pr-4 overflow-hidden">
             <div className="bg-gray-800 p-4 h-full rounded-tr-lg rounded-br-lg">
-              {/* Content for the first column */}
-              <div >
-                <Link href={`/blog/${postData._id}`} className="flex flex-row gap-4 justify-between items-start"
-                >
-                <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
-                  {postData.title}
-                </h1>
-                <p className="text-3xl">
-                  <FaArrowTrendUp />
-                </p>
+              <div>
+                <Link href={`/blog/${post._id}`} className="flex flex-row gap-4 justify-between items-start">
+                  <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">{post.title}</h1>
+                  <p className="text-3xl">
+                    <FaArrowTrendUp />
+                  </p>
                 </Link>
               </div>
-              <p className="h-20 py-1 overflow-hidden">{postData.content}</p>
+              <p className="h-20 py-1 overflow-hidden">{post.content}</p>
               <div className="h-14 overflow-hidden">
-              {postData.tags.map((tag: string) => (
-                <button
-                  key={tag}
-                  className="border border-[#AAFFA9] text-[#AAFFA9] px-2 py-1 mt-4 mr-2 rounded-md text-sm"
-                >
-                  {tag}
-                </button>
-              ))}
+                {post.tags.map((tag) => (
+                  <button
+                    key={tag}
+                    className="border border-[#AAFFA9] text-[#AAFFA9] px-2 py-1 mt-4 mr-2 rounded-md text-sm"
+                  >
+                    {tag}
+                  </button>
+                ))}
               </div>
               <div className="flex items-center mt-4 text-sm text-gray-100">
                 <span className="flex items-center mr-4">
@@ -101,7 +77,7 @@ const Postr = ({ pid }: PostProps) => {
                       d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
                     />
                   </svg>
-                  <p className="text-gray-400">{postData.comments} comments</p>
+                  <p className="text-gray-400">{post.comments} comments</p>
                 </span>
                 <span className="flex items-center">
                   <svg
@@ -119,14 +95,14 @@ const Postr = ({ pid }: PostProps) => {
                     />
                   </svg>
                   <p className="text-gray-400">
-                  {moment(postData.timestamp).format("Do MMM YYYY")}
+                    {moment(post.timestamp).format("Do MMM YYYY")}
                   </p>
                 </span>
               </div>
             </div>
           </div>
         </div>
-      )}
+      ))}
     </>
   );
 };
