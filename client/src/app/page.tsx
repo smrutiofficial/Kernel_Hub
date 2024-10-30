@@ -6,22 +6,35 @@ import Footer from "./components/footer";
 import Navbar from "./components/Navbar";
 import Post from "./components/post";
 import Postrb from "./components/post_rb";
+import {backend_link} from "@/app/constants/constant";
+interface Post {
+    _id: number;
+    id: number;
+    title: string;
+    slug:string;
+    content: string;
+    image: string;
+    tags: string[];
+    comments: number;
+    timestamp: string; // or Date if needed
+}
 
+interface ApiResponse {
+  posts: Post[];
+  totalPages: number;
+}
 export default function Home() {
   // const [activeButton, setActiveButton] = useState("All");
   const [activebtn, setActiveBtn] = useState("All");
   const [activeButton, setActiveButton] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const [total_post, SetTotal_post] = useState(1);
-  const [postData, setPostData] = useState([]); // Add this line to define setPostData
-
-  const buttons = ["All", "Ubuntu", "Fedora", "Open Source", "Vim", "Tutorial"];
+  const [postData, setPostData] = useState<Post[]>([]);
+  const [uniqueTags, setUniqueTags] = useState<string[]>([]);
+  // const buttons = ["All", "Ubuntu", "Fedora", "Open Source", "Vim", "Tutorial"];
   const totalpage = (message: string) => {
-    SetTotal_post(Number(message)); // Convert the string to a number
+    SetTotal_post(Number(message)); 
   };
-  // const handleClick = (buttonName: string) => {
-  //   setActiveButton(buttonName);
-  // };
 
   const router = useRouter();
 
@@ -35,16 +48,22 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `https://kernel-hub.onrender.com/api/posts?page=${currentPage}&sort=${activeButton}`
+          `${backend_link}/api/posts?page=${currentPage}&sort=${activeButton}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.json();
+        const data: ApiResponse = await response.json();
         console.log(data.posts);
 
         setPostData(data.posts);
         SetTotal_post(data.totalPages);
+        // Extract all tags and create a unique list
+        const allTags = data.posts.flatMap((post: Post) => post.tags);
+        const uniqueTagsList = ["All", ...new Set(allTags)];
+
+        // Update the uniqueTags state
+        setUniqueTags(uniqueTagsList);
       } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
       }
@@ -68,7 +87,7 @@ export default function Home() {
   return (
     <>
       <div className="overflow-hidden relative">
-        <div className="h-[40rem] w-[40rem] bg-[#AAFFA9] blur-[15rem] -z-10 absolute  bottom-[40%] left-[15%]"></div>
+        <div className="h-[40rem] w-[40rem] bg-[#AAFFA9] blur-[15rem] -z-10 absolute  bottom-[35%] left-[15%]"></div>
 
         <div className="h-[40rem] w-[40rem] bg-emerald-500 blur-[15rem] -z-10 absolute  bottom-[25%] left-[50%]"></div>
 
@@ -122,13 +141,13 @@ export default function Home() {
 
           <div className="w-full h-16 mb-6 flex flex-row items-center justify-between">
             <div className="flex flex-row gap-4">
-              {buttons.map((buttonName) => (
+              {uniqueTags.map((buttonName) => (
                 <button
                   key={buttonName}
-                  className={`border-2 px-2 rounded-md text-lg font-medium ${
+                  className={`border-2 px-4 py-1 rounded-md text-lg font-medium ${
                     activebtn === buttonName
                       ? "border-[#AAFFA9] bg-[#AAFFA9] text-gray-700"
-                      : "border-gray-500 text-gray-00"
+                      : "bg-gray-800 text-gray-00 border-[#AAFFA9]"
                   }`}
                   onClick={() => handlertClick(buttonName)}
                 >
