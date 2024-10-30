@@ -192,11 +192,8 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   onClick={handlePostComment}
                   className="mt-4 px-12 py-4 w-max bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
                 >
-                  {status}
+                 {status} {status === "Loading..." && `${progress}%`}
                 </button>
-                {status === "Loading..." && (
-                  <div className="mt-2 text-gray-400">{progress}%</div>
-                )}
               </div>
             </div>
 
