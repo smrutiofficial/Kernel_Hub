@@ -7,16 +7,14 @@ import Footer from "@/app/components/footer";
 import axios from "axios";
 import moment from "moment";
 import { backend_link, upload_link } from "@/app/constants/constant";
-import rehypeDocument from 'rehype-document';
-import rehypeFormat from 'rehype-format';
-import rehypeStringify from 'rehype-stringify';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import {unified} from 'unified';
+import rehypeDocument from "rehype-document";
+import rehypeFormat from "rehype-format";
+import rehypeStringify from "rehype-stringify";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import { unified } from "unified";
 import rehypePrettyCode from "rehype-pretty-code";
-import { transformerCopyButton } from '@rehype-pretty/transformers'
-
-
+import { transformerCopyButton } from "@rehype-pretty/transformers";
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,12 +26,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [comments, setComments] = useState<any[]>([]);
   const [paramid, setParamId] = useState("");
-  
+
   const [profile, setProfile] = useState({
     name: "",
     email: "",
   });
-  
+
   const [status, setStatus] = useState("Post Comment"); // New status state
   const [progress, setProgress] = useState(0); // New progress state
   const [processedContent, setProcessedContent] = useState("");
@@ -50,7 +48,9 @@ export default function PostPage({ params }: { params: { id: string } }) {
         setPost(data);
         setLoading(false);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An unknown error occurred.");
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred."
+        );
         setLoading(false);
       }
     };
@@ -103,20 +103,20 @@ export default function PostPage({ params }: { params: { id: string } }) {
         const file = await unified()
           .use(remarkParse)
           .use(remarkRehype)
-          .use(rehypeDocument, { title: '👋🌍' })
+          .use(rehypeDocument, { title: "👋🌍" })
           .use(rehypeFormat)
           .use(rehypeStringify)
           .use(rehypePrettyCode, {
-            theme:"tokyo-night",
+            theme: "tokyo-night",
             transformers: [
               transformerCopyButton({
-                visibility: 'always',
+                visibility: "always",
                 feedbackDuration: 3_000,
               }),
             ],
           })
           .process(post.content);
-          
+
         setProcessedContent(String(file));
       }
     };
@@ -140,11 +140,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
         {
           headers: { "x-auth-token": token },
           onUploadProgress: (progressEvent) => {
-            const total = progressEvent.total || progressEvent.loaded; 
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / total);
+            const total = progressEvent.total || progressEvent.loaded;
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / total
+            );
             setProgress(percentCompleted);
           },
-          
         }
       );
 
@@ -165,9 +166,6 @@ export default function PostPage({ params }: { params: { id: string } }) {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-
-
-
   return (
     <>
       <Navbar />
@@ -177,6 +175,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
             <p className="text-gray-400 mb-2 capitalize">{post.slug}</p>
             <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
             <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
+              <span className="text-gray-400 mr-4">By Smruti Prakash Rout</span>{" "}
               {moment(post.timestamp).format("Do MMM YYYY")}
             </p>
 
@@ -223,11 +222,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
             </div>
 
             <div className="w-full relative">
-            <div
+              <div
                 className="prose prose-lg prose-slate text-white w-full min-w-full p-4"
                 dangerouslySetInnerHTML={{ __html: processedContent }}
               />
             </div>
+            <hr className="mt-8 opacity-30" />
 
             <div className="mt-6 flex items-center">
               <div className="flex flex-col w-full">
@@ -250,16 +250,28 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   onClick={handlePostComment}
                   className="mt-4 px-12 py-4 w-max bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
                 >
-                 {status} {status === "Loading..." && `${progress}%`}
+                  {status} {status === "Loading..." && `${progress}%`}
                 </button>
               </div>
             </div>
-
             <div className="mt-4">
-              <h2 className="text-2xl font-bold">Comments</h2>
+              <h2 className="text-xl -mb-2 font-bold flex items-center">
+                {comments.length} Comments{" "}
+                <span className="ml-8 text-gray-300 flex items-center gap-2 font-medium text-sm px-4 py-1 rounded-md bg-green-500 bg-opacity-15">
+                  0 <span>Online</span>{" "}
+                  <div className="w-2 h-2 ml-2 animate-ping bg-green-500 rounded-full"> </div>
+                </span>
+              </h2>
+              <p className="text-gray-400 my-4">
+                We welcome and encourage thoughtful, respectful, and
+                community-centered discussions.
+              </p>
               {comments.length > 0 ? (
                 comments.map((cmt) => (
-                  <div key={cmt._id} className="py-2">
+                  <div
+                    key={cmt._id}
+                    className="py-2 bg-gray-700 mb-4 rounded-md bg-opacity-35 px-8 w-2/3"
+                  >
                     <div className="flex flex-row gap-4">
                       <p className="font-semibold text-[#AAFFA9] capitalize">
                         {cmt.author?.name || "Unknown"}
