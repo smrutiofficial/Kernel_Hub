@@ -1,37 +1,35 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
 import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/footer";
 import axios from "axios";
-// import Image from "next/image";
 import moment from "moment";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import {backend_link,upload_link} from "@/app/constants/constant";
+import { backend_link, upload_link } from "@/app/constants/constant";
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any>(null);
   const [comment, setComment] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [comments, setComments] = useState<any[]>([]);
-  const [paramid, setparamid] = useState("");
+  const [paramid, setParamId] = useState("");
 
   const [profile, setProfile] = useState({
     name: "",
     email: "",
   });
-  // Fetch post data
+
+  const [status, setStatus] = useState("Post Comment"); // New status state
+  const [progress, setProgress] = useState(0); // New progress state
+
   useEffect(() => {
-    setparamid(params.id);
+    setParamId(params.id);
     const fetchPost = async () => {
       try {
         const res = await fetch(`${backend_link}/api/posts/${params.id}`);
@@ -40,37 +38,24 @@ export default function PostPage({ params }: { params: { id: string } }) {
         }
         const data = await res.json();
         setPost(data);
-
         setLoading(false);
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred.");
-        }
+        setError(err instanceof Error ? err.message : "An unknown error occurred.");
         setLoading(false);
       }
     };
-
     fetchPost();
   }, [params.id]);
 
-  // Fetch user data (profile pic, etc.)
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
 
       if (token) {
         try {
-          const response = await axios.get(
-            `${backend_link}/api/auth/me`,
-            {
-              headers: {
-                "x-auth-token": token,
-              },
-            }
-          );
-
+          const response = await axios.get(`${backend_link}/api/auth/me`, {
+            headers: { "x-auth-token": token },
+          });
           setProfile({
             name: response.data.name,
             email: response.data.email,
@@ -84,27 +69,22 @@ export default function PostPage({ params }: { params: { id: string } }) {
       }
       setLoading(false);
     };
-
     fetchProfile();
   }, []);
 
-  // Fetch comments
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await fetch(
-          `${backend_link}/api/comments/${paramid}`
-        );
+        const res = await fetch(`${backend_link}/api/comments/${paramid}`);
         if (res.ok) {
           const data = await res.json();
           setComments(data);
           console.log(data);
         }
       } catch (err) {
-        console.error("Failed to fetch comments");
+        console.error(`${err}Failed to fetch comments`);
       }
     };
-
     fetchComments();
   }, [paramid]);
 
@@ -112,31 +92,38 @@ export default function PostPage({ params }: { params: { id: string } }) {
     const token = localStorage.getItem("token");
     if (!comment || !token) return;
 
+    setStatus("Loading..."); // Set status to "Loading..."
+    setProgress(0); // Reset progress to 0
+
     try {
       await axios.post(
         `${backend_link}/api/comments/`,
         {
           body: comment,
-          // time:
           postId: params.id,
         },
         {
-          headers: {
-            "x-auth-token": token,
+          headers: { "x-auth-token": token },
+          onUploadProgress: (progressEvent) => {
+            const total = progressEvent.total || progressEvent.loaded; 
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / total);
+            setProgress(percentCompleted);
           },
+          
         }
       );
 
-      // Refetch comments
       const res = await fetch(`${backend_link}/api/comments/${paramid}`);
       if (res.ok) {
         const data = await res.json();
         setComments(data);
       }
 
+      setStatus("Post Comment"); // Reset status after success
       setComment(""); // Clear the textarea
     } catch (err) {
       console.error("Failed to post comment", err);
+      setStatus("Failed to post comment"); // Show error status
     }
   };
 
@@ -155,39 +142,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
               {moment(post.timestamp).format("Do MMM YYYY")}
             </p>
 
-            <div
-              className=" 
-              flex flex-col h-[32rem] mt-8 items-center justify-center flex-wrap mb-6 relative
-        after:content-[''] after:absolute after:h-full 
-        after:w-full after:bg-gradient-to-r 
-
-        after:via-transparent 
-        after:from-gray-900 
-        after:to-gray-900
-
-        after:t-1/2 after:l-1/2 
-        after:translate-1/2 after:-z-10 p-[0.5rem] after:rounded-md 
-        before:content-[''] before:absolute before:h-full 
-        before:w-full before:bg-gradient-to-r  
-
-        before:via-transparent 
-      before:from-[#A5FECB] 
-      before:to-[#A5FECB]
-  
-
-        before:t-1/2 before:l-1/2 
-        before:translate-1/2 before:-z-10 before:rounded-md before:blur-3xl
-            "
-            >
+            <div className="flex flex-col h-[32rem] mt-8 items-center justify-center flex-wrap mb-6 relative">
               <img
                 src={`${upload_link}/${post.image}`}
                 alt=""
-                width={100}
-                height={100}
                 className="w-full h-full object-cover"
               />
-              {/* <div className="h-full w-full bg-gray-800"></div> */}
-              {/* <Image src="" alt="" layout="fill" objectFit="cover" /> */}
             </div>
 
             <div className="mt-4 flex gap-4">
@@ -200,22 +160,22 @@ export default function PostPage({ params }: { params: { id: string } }) {
                 </button>
               ))}
             </div>
+
             <div className="w-full relative">
-              <ReactMarkdown  remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeHighlight]} 
-                className="prose prose-lg prose-slate text-white w-full min-w-full p-4">{post.content}
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]}
+                className="prose prose-lg prose-slate text-white w-full min-w-full p-4"
+              >
+                {post.content}
               </ReactMarkdown>
-            </div> 
+            </div>
 
-            {/* <p className="mt-4 w-full">{post.content}</p> */}
-
-            {/* User Profile Picture and Comment Input */}
-            <div className="mt-6 flex items-center ">
+            <div className="mt-6 flex items-center">
               <div className="flex flex-col w-full">
-                <div className="mb-6 flex flexrow gap-6 items-center">
-                  {/* user profile */}
+                <div className="mb-6 flex flex-row gap-6 items-center">
                   <div className="bg-gray-500 h-16 w-16 rounded-full"></div>
-                  <div className="">
+                  <div>
                     <p className="capitalize font-bold tracking-wider text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
                       {profile.name}
                     </p>
@@ -230,15 +190,16 @@ export default function PostPage({ params }: { params: { id: string } }) {
                 />
                 <button
                   onClick={handlePostComment}
-                  className="mt-4 px-12 py-4 w-max 
-                  bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
+                  className="mt-4 px-12 py-4 w-max bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
                 >
-                  Post Comment
+                  {status}
                 </button>
+                {status === "Loading..." && (
+                  <div className="mt-2 text-gray-400">{progress}%</div>
+                )}
               </div>
             </div>
 
-            {/* Display Comments */}
             <div className="mt-4">
               <h2 className="text-2xl font-bold">Comments</h2>
               {comments.length > 0 ? (
