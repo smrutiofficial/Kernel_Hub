@@ -21,6 +21,10 @@ const config: Config = {
               color: "#AAFFA9",
               fontWeight: "700",
             },
+            h2: {
+              color: "#AAFFA9",
+              fontWeight: "600",
+            },
             blockquote: {
               borderLeftColor: "#AAFFA9",
               fontStyle: "italic",

@@ -201,7 +201,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
             <div className="w-full relative">
             <div
-                className="prose-invert prose-lg prose-slate text-white w-full min-w-full p-4"
+                className="prose prose-lg prose-slate text-white w-full min-w-full p-4"
                 dangerouslySetInnerHTML={{ __html: processedContent }}
               />
             </div>
