@@ -17,6 +17,7 @@ import rehypePrettyCode from "rehype-pretty-code";
 import Image from "next/image";
 import bg from "@/app/image/grain.jpg";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
+import Preloader from '@/app/components/preloader';
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +34,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
     name: "",
     email: "",
   });
+  
 
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000); // Simulate loading time
+    return () => clearTimeout(timer);
+  }, [setLoading]);
   const [status, setStatus] = useState("Post Comment"); // New status state
   const [progress, setProgress] = useState(0); // New progress state
   const [processedContent, setProcessedContent] = useState("");
@@ -163,12 +169,16 @@ export default function PostPage({ params }: { params: { id: string } }) {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  // if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (
     <>
-      <Navbar />
+     {loading ? <Preloader /> : 
+     
+     
+ <div className="">
+  <Navbar />
       <div className="w-full h-full relative">
         <Image
           src={bg}
@@ -305,6 +315,11 @@ export default function PostPage({ params }: { params: { id: string } }) {
         </div>
       </div>
       <Footer />
+ </div>
+     
+     
+     }
+      
     </>
   );
 }
