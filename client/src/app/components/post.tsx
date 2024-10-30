@@ -71,10 +71,10 @@ const Post = ({ postData }: PostProps) => {
           <div className="w-full">
             <div className="bg-gray-800 p-4 rounded-bl-lg rounded-br-lg h-64">
               <div className="flex flex-row gap-4 justify-between items-start">
-                <Link href={`/blog/${postItem._id}`} className="flex flex-row justify-between w-full ">
-                  <a className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
+                <Link href={`/blog/${postItem._id}`} className="flex hover:text-[#AAFFA9] flex-row justify-between w-full ">
+                  <p className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
                     {postItem.title}
-                  </a>
+                  </p>
                   <p className="text-3xl">
                     <FaArrowTrendUp />
                   </p>

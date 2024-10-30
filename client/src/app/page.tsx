@@ -54,7 +54,7 @@ export default function Home() {
           throw new Error("Network response was not ok");
         }
         const data: ApiResponse = await response.json();
-        console.log(data.posts);
+        // console.log(data.posts);
 
         setPostData(data.posts);
         SetTotal_post(data.totalPages);

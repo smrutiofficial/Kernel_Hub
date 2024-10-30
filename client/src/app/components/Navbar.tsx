@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import ProfilePic from "../image/profile-pic.png";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const Navbar = () => {
@@ -17,35 +18,47 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <a href="/" className="text-white text-3xl font-bold">
+        <Link href="/">
+        <p className="text-white text-3xl font-bold">
           Kernel <span className="text-[#AAFFA9]">Hub</span>
-        </a>
+        </p>
+        </Link>
         <ul className="flex space-x-4">
           <li>
-            <a href="/" className="text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500">
+            <Link href="/">
+            <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500">
               Home
-            </a>
+            </p>
+            </Link>
           </li>
 
           <li>
-            <a href="/services" className="text-gray-400 hover:text-yellow-300">
+            <Link href="/services">
+            <p className="text-gray-400 hover:text-yellow-300">
               Resources
-            </a>
+            </p>
+            </Link>
           </li>
           <li>
-            <a href="/contact" className="text-gray-400 hover:text-yellow-300">
+            <Link href="/contact">
+            <p className="text-gray-400 hover:text-yellow-300">
               Community
-            </a>
+            </p>
+            </Link>
           </li>
           <li>
-            <a href="/contact" className="text-gray-400 hover:text-yellow-300">
+            <Link href="/contact">
+            <p className="text-gray-400 hover:text-yellow-300">
               Feedback
-            </a>
+            </p>
+            </Link>
           </li>
           <li>
-            <a href="/about" className="text-gray-400 hover:text-yellow-300">
+            <Link href="/about">
+            <p className="text-gray-400 hover:text-yellow-300">
               About
-            </a>
+            </p>
+            </Link>
           </li>
         </ul>
         <div className="flex flex-row gap-4 justify-center items-center">

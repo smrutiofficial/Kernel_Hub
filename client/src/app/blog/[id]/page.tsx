@@ -14,6 +14,8 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 import rehypePrettyCode from "rehype-pretty-code";
+import Image from "next/image";
+import bg from "@/app/image/grain.jpg";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
 
 export default function PostPage({ params }: { params: { id: string } }) {
@@ -55,8 +57,18 @@ export default function PostPage({ params }: { params: { id: string } }) {
       }
     };
     fetchPost();
+    const fetchComments = async () => {
+      try {
+        const res = await axios.get(`${backend_link}/api/comments/${params.id}`);
+        setComments(res.data);
+      } catch (err) {
+        console.log("Failed to fetch comments:", err);
+      }
+    };
+    
+    fetchComments();
   }, [params.id]);
-
+  // featch profile data of a current user
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
@@ -81,22 +93,10 @@ export default function PostPage({ params }: { params: { id: string } }) {
     };
     fetchProfile();
   }, []);
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const res = await fetch(`${backend_link}/api/comments/${paramid}`);
-        if (res.ok) {
-          const data = await res.json();
-          setComments(data);
-          console.log(data);
-        }
-      } catch (err) {
-        console.error(`${err}Failed to fetch comments`);
-      }
-    };
-    fetchComments();
-  }, [paramid]);
+  // featch comment data of the blog
 
+
+  // applying styleing to the body
   useEffect(() => {
     const processContent = async () => {
       if (post?.content) {
@@ -169,19 +169,28 @@ export default function PostPage({ params }: { params: { id: string } }) {
   return (
     <>
       <Navbar />
-      <div className="container w-[60%] mx-auto px-6 py-16">
-        {post ? (
-          <>
-            <p className="text-gray-400 mb-2 capitalize">{post.slug}</p>
-            <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
-            <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
-              <span className="text-gray-400 mr-4">By Smruti Prakash Rout</span>{" "}
-              {moment(post.timestamp).format("Do MMM YYYY")}
-            </p>
+      <div className="w-full h-full relative">
+        <Image
+          src={bg}
+          alt=""
+          layout="cover"
+          className="opacity-[3%] -z-10 absolute object-cover w-full h-full"
+        ></Image>
+        <div className="container w-[60%] mx-auto px-6 py-12">
+          {post ? (
+            <>
+              <p className="text-gray-400 mb-2 capitalize">{post.slug}</p>
+              <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+              <p className="text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
+                <span className="text-gray-400 mr-4">
+                  By Smruti Prakash Rout
+                </span>{" "}
+                {moment(post.timestamp).format("Do MMM YYYY")}
+              </p>
 
-            <div
-              className=" 
-              flex flex-col h-[32rem] mt-8 items-center justify-center flex-wrap mb-6 relative
+              <div
+                className=" 
+              flex flex-col h-[38rem] mt-6 items-center justify-center flex-wrap mb-6 relative
         after:content-[''] after:absolute after:h-full 
         after:w-full after:bg-gradient-to-r 
 
@@ -202,93 +211,98 @@ export default function PostPage({ params }: { params: { id: string } }) {
         before:t-1/2 before:l-1/2 
         before:translate-1/2 before:-z-10 before:rounded-md before:blur-[15rem]
             "
-            >
-              <img
-                src={`${upload_link}/${post.image}`}
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="mt-4 flex gap-4">
-              {post.tags.map((tag: string) => (
-                <button
-                  key={tag}
-                  className="border-2 border-[#AAFFA9] text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max rounded-md mb-4 py-2 px-4"
-                >
-                  {tag}
-                </button>
-              ))}
-            </div>
-
-            <div className="w-full relative">
-              <div
-                className="prose prose-lg prose-slate text-white w-full min-w-full p-4"
-                dangerouslySetInnerHTML={{ __html: processedContent }}
-              />
-            </div>
-            <hr className="mt-8 opacity-30" />
-
-            <div className="mt-6 flex items-center">
-              <div className="flex flex-col w-full">
-                <div className="mb-6 flex flex-row gap-6 items-center">
-                  <div className="bg-gray-500 h-16 w-16 rounded-full"></div>
-                  <div>
-                    <p className="capitalize font-bold tracking-wider text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
-                      {profile.name}
-                    </p>
-                    <p className="text-gray-500">{profile.email}</p>
-                  </div>
-                </div>
-                <textarea
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder="Write a comment..."
-                  className="w-full resize-none h-40 border-2 border-[#aaffa982] px-6 py-6 rounded-md bg-gray-700 focus:border-[#AAFFA9]"
+              >
+                <img
+                  src={`${upload_link}/${post.image}`}
+                  alt=""
+                  className="w-full h-full object-cover"
                 />
-                <button
-                  onClick={handlePostComment}
-                  className="mt-8 mb-4 px-12 py-4 w-max bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
-                >
-                  {status} {status === "Loading..." && `${progress}%`}
-                </button>
               </div>
-            </div>
-            <div className="mt-4">
-              <h2 className="text-xl -mb-2 font-bold flex items-center">
-                {comments.length} Comments{" "}
-                <span className="ml-8 text-gray-300 flex items-center gap-2 font-medium text-sm px-4 py-1 rounded-md bg-green-500 bg-opacity-15">
-                  0 <span>Online</span>{" "}
-                  <div className="w-2 h-2 ml-2 animate-ping bg-green-500 rounded-full"> </div>
-                </span>
-              </h2>
-              <p className="text-gray-400 my-4">
-                We welcome and encourage thoughtful, respectful, and
-                community-centered discussions.
-              </p>
-              {comments.length > 0 ? (
-                comments.map((cmt) => (
-                  <div
-                    key={cmt._id}
-                    className="py-2 bg-gray-700 mb-4 rounded-md bg-opacity-35 px-8 w-full"
+
+              <div className="mt-12 flex gap-4">
+                {post.tags.map((tag: string) => (
+                  <button
+                    key={tag}
+                    className="border-2 border-[#AAFFA9] text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max rounded-md mb-4 py-2 px-4"
                   >
-                    <div className="flex flex-row gap-4">
-                      <p className="font-semibold text-[#AAFFA9] capitalize">
-                        {cmt.author?.name || "Unknown"}
+                    {tag}
+                  </button>
+                ))}
+              </div>
+
+              <div className="w-full relative">
+                <div
+                  className="prose prose-lg prose-slate text-white w-full min-w-full p-4"
+                  dangerouslySetInnerHTML={{ __html: processedContent }}
+                />
+              </div>
+              <hr className="mt-8 opacity-30" />
+
+              <div className="mt-6 flex items-center">
+                <div className="flex flex-col w-full">
+                  <div className="mb-6 flex flex-row gap-6 items-center">
+                    <div className="bg-gray-500 h-16 w-16 rounded-full"></div>
+                    <div>
+                      <p className="capitalize font-bold tracking-wider text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
+                        {profile.name}
                       </p>
-                      <p className="text-gray-500">{moment(cmt.createdAt).fromNow()}</p>
+                      <p className="text-gray-500">{profile.email}</p>
                     </div>
-                    <p className="ml-6 mt-2 capitalize">{cmt.body}</p>
                   </div>
-                ))
-              ) : (
-                <p>No comments yet.</p>
-              )}
-            </div>
-          </>
-        ) : (
-          <p>Post not found</p>
-        )}
+                  <textarea
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Write a comment..."
+                    className="w-full resize-none h-40 border-2 border-[#aaffa982] px-6 py-6 rounded-md bg-gray-700 focus:border-[#AAFFA9]"
+                  />
+                  <button
+                    onClick={handlePostComment}
+                    className="mt-8 mb-4 px-12 py-4 w-max bg-gradient-to-r from-[#AAFFA9] to-emerald-400 text-gray-600 font-bold rounded-md"
+                  >
+                    {status} {status === "Loading..." && `${progress}%`}
+                  </button>
+                </div>
+              </div>
+              <div className="mt-4">
+                <h2 className="text-xl -mb-2 font-bold flex items-center">
+                  {comments.length} Comments{" "}
+                  <span className="ml-8 text-gray-300 flex items-center gap-2 font-medium text-sm px-4 py-1 rounded-md bg-green-500 bg-opacity-15">
+                    0 <span>Online</span>{" "}
+                    <div className="w-2 h-2 ml-2 animate-ping bg-green-500 rounded-full">
+                      {" "}
+                    </div>
+                  </span>
+                </h2>
+                <p className="text-gray-400 my-4">
+                  We welcome and encourage thoughtful, respectful, and
+                  community-centered discussions.
+                </p>
+                {comments.length > 0 ? (
+                  comments.map((cmt) => (
+                    <div
+                      key={cmt._id}
+                      className="py-2 bg-gray-700 mb-4 rounded-md bg-opacity-35 px-8 w-full"
+                    >
+                      <div className="flex flex-row gap-4">
+                        <p className="font-semibold text-[#AAFFA9] capitalize">
+                          {cmt.author?.name || "Unknown"}
+                        </p>
+                        <p className="text-gray-500">
+                          {moment(cmt.createdAt).fromNow()}
+                        </p>
+                      </div>
+                      <p className="ml-6 mt-2 capitalize">{cmt.body}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p></p>
+                )}
+              </div>
+            </>
+          ) : (
+            <p>Post not found</p>
+          )}
+        </div>
       </div>
       <Footer />
     </>
