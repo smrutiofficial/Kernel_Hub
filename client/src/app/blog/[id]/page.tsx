@@ -270,7 +270,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                 comments.map((cmt) => (
                   <div
                     key={cmt._id}
-                    className="py-2 bg-gray-700 mb-4 rounded-md bg-opacity-35 px-8 w-2/3"
+                    className="py-2 bg-gray-700 mb-4 rounded-md bg-opacity-35 px-8 w-full"
                   >
                     <div className="flex flex-row gap-4">
                       <p className="font-semibold text-[#AAFFA9] capitalize">
