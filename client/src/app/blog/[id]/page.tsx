@@ -6,10 +6,17 @@ import Navbar from "@/app/components/Navbar";
 import Footer from "@/app/components/footer";
 import axios from "axios";
 import moment from "moment";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
 import { backend_link, upload_link } from "@/app/constants/constant";
+import rehypeDocument from 'rehype-document';
+import rehypeFormat from 'rehype-format';
+import rehypeStringify from 'rehype-stringify';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import {unified} from 'unified';
+import rehypePrettyCode from "rehype-pretty-code";
+import { transformerCopyButton } from '@rehype-pretty/transformers'
+
+
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,14 +28,15 @@ export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [comments, setComments] = useState<any[]>([]);
   const [paramid, setParamId] = useState("");
-
+  
   const [profile, setProfile] = useState({
     name: "",
     email: "",
   });
-
+  
   const [status, setStatus] = useState("Post Comment"); // New status state
   const [progress, setProgress] = useState(0); // New progress state
+  const [processedContent, setProcessedContent] = useState("");
 
   useEffect(() => {
     setParamId(params.id);
@@ -89,6 +97,31 @@ export default function PostPage({ params }: { params: { id: string } }) {
     };
     fetchComments();
   }, [paramid]);
+  useEffect(() => {
+    const processContent = async () => {
+      if (post?.content) {
+        const file = await unified()
+          .use(remarkParse)
+          .use(remarkRehype)
+          .use(rehypeDocument, { title: '👋🌍' })
+          .use(rehypeFormat)
+          .use(rehypeStringify)
+          .use(rehypePrettyCode, {
+            theme:"everforest-dark",
+            transformers: [
+              transformerCopyButton({
+                visibility: 'always',
+                feedbackDuration: 3_000,
+              }),
+            ],
+          })
+          .process(post.content);
+          
+        setProcessedContent(String(file));
+      }
+    };
+    processContent();
+  }, [post?.content]);
 
   const handlePostComment = async () => {
     const token = localStorage.getItem("token");
@@ -132,6 +165,9 @@ export default function PostPage({ params }: { params: { id: string } }) {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
+
+
+
   return (
     <>
       <Navbar />
@@ -164,13 +200,10 @@ export default function PostPage({ params }: { params: { id: string } }) {
             </div>
 
             <div className="w-full relative">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeHighlight]}
-                className="prose prose-lg prose-slate text-white w-full min-w-full p-4"
-              >
-                {post.content}
-              </ReactMarkdown>
+            <div
+                className="prose-invert prose-lg prose-slate text-white w-full min-w-full p-4"
+                dangerouslySetInnerHTML={{ __html: processedContent }}
+              />
             </div>
 
             <div className="mt-6 flex items-center">
