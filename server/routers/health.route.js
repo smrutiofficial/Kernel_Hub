@@ -1,6 +1,6 @@
 // healthRouter.js
-import express from 'express';
-import { getHealthStatus } from '../controllers/health.controller';
+const express=require("express");
+const { getHealthStatus }=require("../controllers/health.controller");
 
 const router = express.Router();
 

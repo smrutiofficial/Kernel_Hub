@@ -1,7 +1,7 @@
 // healthController.js
-import mongoose from 'mongoose';
-import os from 'os';
-import cloudinary from 'cloudinary';
+const mongoose=require("mongoose");
+const os=require("os");
+const cloudinary=require("cloudinary");
 
 export const getHealthStatus = async (req, res) => {
   try {
