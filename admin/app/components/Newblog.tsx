@@ -121,9 +121,9 @@ const Newblog = () => {
                       className="object-cover relative w-[95%] h-[90%]"
                     />
                   </div>
-                  {image.size > 5 * 1024 * 1024 ? (
+                  {image.size > 800 * 1024 ? (
                     <p className="text-sm text-red-500 mt-2 bg-gray-800 absolute bottom-2 right-8 font-bold">
-                      File must be under 5 MB
+                      File must be under 800 KB
                     </p>
                   ) : (
                     <p className="text-sm text-[#AAFFA9] mt-2 bg-gray-800 absolute bottom-2 right-8 font-bold">

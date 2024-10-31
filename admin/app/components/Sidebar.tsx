@@ -10,6 +10,7 @@ import { SiCrowdsource } from "react-icons/si";
 import { MdDesignServices } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
 import { useRouter } from "next/navigation";
+import { FaTags } from "react-icons/fa6";
 
 const Sidebar = ({
   handlecontents,
@@ -82,6 +83,16 @@ const Sidebar = ({
           >
             <FaCommentAlt className="text-2xl" />
             All Comments
+          </button>
+          <button
+            // href="/all-comments"
+            className={`${getItemStyle(
+              "Manage tags"
+            )} flex pl-12 gap-6 items-center`}
+            onClick={() => handleItemClick("Manage Tags")}
+          >
+            <FaTags className="text-2xl" />
+            Manage Tags
           </button>
           <button
             // href="/resources"

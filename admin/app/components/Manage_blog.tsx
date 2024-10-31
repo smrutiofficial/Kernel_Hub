@@ -6,10 +6,20 @@ import Popupblog from "./Popupblog";
 import { SiGoogletagmanager } from "react-icons/si";
 import Pagination from "./Pagination";
 import moment from "moment";
-import {backend_link} from "@/app/constants/constant";
-
+import { backend_link } from "@/app/constants/constant";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 interface BlogPost {
-  _id:string;
+  _id: string;
   id: string;
   title: string;
   content: string;
@@ -26,11 +36,11 @@ interface BlogResponse {
 const ManageBlog = () => {
   const [sortOption, setSortOption] = useState<string>("newest");
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [hoveredPostId, setHoveredPostId] = useState<string | null>(null); 
-  const [popupst,setPopupst]=useState("hidden");// Added state for hoveredPostId
-  const [cpage,setCpage]=useState(1)
-  const [totalpage,SetTotalpage]=useState(0);
-  const [cpost,setCpost]=useState("");
+  const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
+  const [popupst, setPopupst] = useState("hidden"); // Added state for hoveredPostId
+  const [cpage, setCpage] = useState(1);
+  const [totalpage, SetTotalpage] = useState(0);
+  const [cpost, setCpost] = useState("");
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
@@ -47,7 +57,7 @@ const ManageBlog = () => {
     };
 
     fetchBlogPosts();
-  }, [sortOption,cpage]);
+  }, [sortOption, cpage]);
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(event.target.value);
@@ -56,7 +66,7 @@ const ManageBlog = () => {
   const handleDelete = async (postId: string) => {
     try {
       await axios.delete(`${backend_link}/api/posts/${postId}`);
-      setBlogPosts(blogPosts.filter(post => post._id !== postId));
+      setBlogPosts(blogPosts.filter((post) => post._id !== postId));
     } catch (error) {
       console.error("Error deleting blog post:", error);
     }
@@ -64,11 +74,22 @@ const ManageBlog = () => {
 
   return (
     <>
-      <Popupblog popupst={popupst} setPopupst={setPopupst} cpost={cpost} blogPosts={blogPosts} setBlogPosts={setBlogPosts}/>
+      <Popupblog
+        popupst={popupst}
+        setPopupst={setPopupst}
+        cpost={cpost}
+        blogPosts={blogPosts}
+        setBlogPosts={setBlogPosts}
+      />
       <div className="p-10 h-svh overflow-y-scroll relative text-white">
         <div className="flex flex-row justify-between items-center">
-        <p className="text-xl flex flex-row gap-2 items-center "> <span className="flex flex-row gap-2 items-center hover:text-[#AAFFA9] cursor-pointer"><SiGoogletagmanager/> Manage Blog</span>  <span>/</span>
-        </p>
+          <p className="text-xl flex flex-row gap-2 items-center ">
+            {" "}
+            <span className="flex flex-row gap-2 items-center hover:text-[#AAFFA9] cursor-pointer">
+              <SiGoogletagmanager /> Manage Blog
+            </span>{" "}
+            <span>/</span>
+          </p>
           <select
             value={sortOption}
             onChange={handleSortChange}
@@ -107,7 +128,9 @@ const ManageBlog = () => {
             >
               <div className="flex flex-row gap-10 w-[90%] rounded-md py-1 justify-center items-center px-4">
                 <p className="max-w-10 w-10">
-                {((cpage - 1) * 12 + blogPosts.indexOf(post) + 1).toString().padStart(2, "0")}
+                  {((cpage - 1) * 12 + blogPosts.indexOf(post) + 1)
+                    .toString()
+                    .padStart(2, "0")}
                 </p>
                 <div className="w-[70%] max-w-[70%]">
                   <p className="">{post.title}</p>
@@ -115,7 +138,9 @@ const ManageBlog = () => {
                 <div
                   className={`border py-1 px-2 rounded-md border-gray-500
               ${
-                hoveredPostId === post._id ? "bg-yellow-400 bg-opacity-50 text-gray-100" : ""
+                hoveredPostId === post._id
+                  ? "bg-yellow-400 bg-opacity-50 text-gray-100"
+                  : ""
               } `}
                 >
                   <p>{moment(post.createdAt).format("Do MMM YYYY")}</p>
@@ -126,10 +151,9 @@ const ManageBlog = () => {
               <div className="w-[10%] flex flex-row justify-center items-center gap-4 text-xl">
                 <RiEdit2Fill
                   onClick={() => {
-                    setPopupst("block")
+                    setPopupst("block");
                     setCpost(post._id);
                   }}
-
                   className={`h-[70%] w-8 rounded-md p-1 ${
                     hoveredPostId === post._id
                       ? "bg-[#AAFFA9] text-gray-700"
@@ -140,22 +164,49 @@ const ManageBlog = () => {
                       : "hover:text-gray-700"
                   }`}
                 />
-                <MdDelete
-                  onClick={() => handleDelete(post._id)}
-                  className={`h-[70%] w-8 p-1 rounded-md ${
-                    hoveredPostId === post._id
-                      ? "bg-red-400 text-gray-700"
-                      : "hover:bg-red-400 hover:text-gray-700"
-                  }`}
-                />
+
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <MdDelete
+                      className={`h-[70%] w-8 p-1 rounded-md ${
+                        hoveredPostId === post._id
+                          ? "bg-red-400 text-gray-700"
+                          : "hover:bg-red-400 hover:text-gray-700"
+                      }`}
+                    />
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="bg-gray-900">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-white">
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="text-gray-400">
+                        This action cannot be undone. This will permanently
+                        delete this blog post, along with all associated
+                        comments and data.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="bg-red-400 text-white border hover:bg-red-500 hover:bg-opacity-45 hover:text-white border-transparent">
+                        Cancel
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        className="bg-gray-800 text-white hover:bg-gray-500 hover:bg-opacity-45 hover:text-white border border-transparent"
+                        onClick={() => handleDelete(post._id)}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           ))}
         </div>
-        <Pagination 
-          currentPage={cpage} 
-          totalPages={totalpage} 
-          setcpage={setCpage} 
+        <Pagination
+          currentPage={cpage}
+          totalPages={totalpage}
+          setcpage={setCpage}
         />
       </div>
     </>

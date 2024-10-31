@@ -8,34 +8,42 @@ import { MdDelete } from "react-icons/md";
 import Pagination from "./Pagination";
 import moment from "moment";
 import { backend_link } from "@/app/constants/constant";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface BlogComments {
   _id: string;
-  body:string;
-  createdAt:string;
-
+  body: string;
+  createdAt: string;
 }
 
 interface BlogResponse {
   comments: BlogComments[];
   currentPage: number;
-  totalPages: number; 
+  totalPages: number;
 }
 
 const Comments = () => {
-  // const [sortOption, setSortOption] = useState<string>("newest");
   const [blogComments, setBlogComments] = useState<BlogComments[]>([]);
   const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
-  // const [popupst,setPopupst]=useState("hidden");// Added state for hoveredPostId
   const [cpage, setCpage] = useState(1);
   const [totalpage, SetTotalpage] = useState(0);
-  // const [cpost,setCpost]=useState("");
+
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
         const response = await axios.get<BlogResponse>(
-          `${backend_link}/api/comments`
+          `${backend_link}/api/comments?page=${cpage}`
         );
         setBlogComments(response.data.comments); // Now correctly accessing posts
         setCpage(response.data.currentPage);
@@ -114,14 +122,42 @@ const Comments = () => {
             </div>
 
             <div className="w-[10%] flex flex-row justify-center items-center gap-4 text-xl">
-              <MdDelete
-                onClick={() => handleDelete(cmt._id)}
-                className={`h-[70%] w-8 p-1 rounded-md ${
-                  hoveredPostId === cmt._id
-                    ? "bg-red-400 text-gray-700"
-                    : "hover:bg-red-400 hover:text-gray-700"
-                }`}
-              />
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <MdDelete
+                    // onClick={() => handleDelete(cmt._id)}
+                    // onClick={() => <Dilog />}
+                    className={`h-[70%] w-8 p-1 rounded-md ${
+                      hoveredPostId === cmt._id
+                        ? "bg-red-400 text-gray-700"
+                        : "hover:bg-red-400 hover:text-gray-700"
+                    }`}
+                  />
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-gray-900">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-white">
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-gray-400">
+                      Deleting this comment is a permanent action and cannot be
+                      undone. This will remove the comment from the post and
+                      cannot be recovered.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="bg-red-400 text-white border hover:bg-red-500 hover:bg-opacity-45 hover:text-white border-transparent">
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      className="bg-gray-800 text-white hover:bg-gray-500 hover:bg-opacity-45 hover:text-white border border-transparent"
+                      onClick={() => handleDelete(cmt._id)}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         ))}

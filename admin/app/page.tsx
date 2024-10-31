@@ -9,7 +9,7 @@ import Resources from "./components/Resources";
 import Newblog from "./components/Newblog";
 import { useRouter } from "next/navigation";
 import Services from "./components/Services";
-
+import Tags from "@/app/components/Tags";
 export default function Home() {
   const [sidev,setSidev]=useState("Dashboard");
   const handleContents = (res:string) => {    
@@ -34,6 +34,7 @@ export default function Home() {
           {sidev === "Dashboard" && <Dashboard />}
           {sidev === "All Comments" && <Comments />}
           {sidev === "Manage Blog" && <Manage_blog />}
+          {sidev === "Manage Tags" && <Tags />}
           {sidev === "Resources" && <Resources />}
           {sidev === "New Blog" && <Newblog />}
           {sidev === "Services" && <Services />}
