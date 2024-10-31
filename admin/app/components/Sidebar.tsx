@@ -87,7 +87,7 @@ const Sidebar = ({
           <button
             // href="/all-comments"
             className={`${getItemStyle(
-              "Manage tags"
+              "Manage Tags"
             )} flex pl-12 gap-6 items-center`}
             onClick={() => handleItemClick("Manage Tags")}
           >
