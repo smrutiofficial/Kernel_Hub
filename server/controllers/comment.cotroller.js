@@ -68,18 +68,19 @@ const getAllComments = async (req, res) => {
 
 // Delete a comment
 const deleteComment = async (req, res) => {
-  const { commentId } = req.params;
+  const { id} = req.params;
 
   try {
-    const comment = await Comment.findById(commentId);
+    const comment = await Comment.findById(id);
+    // res.json(comment)
     if (!comment) {
       return res.status(404).json({ msg: "Comment not found" });
     }
-
-    // Optional: Check if the user is the author of the comment
-    if (comment.author.toString() !== req.user.id) {
-      return res.status(403).json({ msg: "User not authorized" });
-    }
+   
+    // // Optional: Check if the user is the author of the comment
+    // if (comment.author.toString() !== req.user.id) {
+    //   return res.status(403).json({ msg: "User not authorized" });
+    // }
 
     await comment.remove();
     res.json({ msg: "Comment deleted" });
