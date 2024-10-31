@@ -32,9 +32,9 @@ const getCommentsForPost = async (req, res) => {
 
   try {
     const comments = await Comment.find({ post: postId })
-    .populate("author", ["name", "email"])
-    .sort({ createdAt: -1 }); // Sort by newest first
-    ;
+      .populate("author", ["name", "email"])
+      .sort({ createdAt: -1 }); // Sort by newest first
+
     res.json(comments);
   } catch (err) {
     console.error(err.message);
@@ -42,18 +42,51 @@ const getCommentsForPost = async (req, res) => {
   }
 };
 
-
+// Get all comments with pagination
 const getAllComments = async (req, res) => {
+  const { page = 1, limit = 12 } = req.query;
+
   try {
-    const comments = await Comment.find().populate("author", ["name", "email"]);
+    const totalComments = await Comment.countDocuments();
+    const comments = await Comment.find()
+      .populate("author", ["name", "email"])
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
 
-    // Get total number of comments
-    const totalComments = comments.length;
-
-    res.json({ totalComments, comments });
+    res.json({
+      totalComments,
+      totalPages: Math.ceil(totalComments / limit),
+      currentPage: Number(page),
+      comments,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
   }
 };
-module.exports = { createComment, getCommentsForPost, getAllComments };
+
+// Delete a comment
+const deleteComment = async (req, res) => {
+  const { commentId } = req.params;
+
+  try {
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res.status(404).json({ msg: "Comment not found" });
+    }
+
+    // Optional: Check if the user is the author of the comment
+    if (comment.author.toString() !== req.user.id) {
+      return res.status(403).json({ msg: "User not authorized" });
+    }
+
+    await comment.remove();
+    res.json({ msg: "Comment deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+module.exports = { createComment, getCommentsForPost, getAllComments, deleteComment };
