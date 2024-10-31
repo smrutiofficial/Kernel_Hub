@@ -31,7 +31,7 @@ app.use("/api/auth/admin",require("./routers/admin.route.js"))
 // tags routes
 app.use("/api/tags", tagsRouter);
 // health  routes
-app.use("/api/health", healthRouter);
+app.use("/api", healthRouter);
 
 // Start server
 const PORT = process.env.PORT || 5000;
