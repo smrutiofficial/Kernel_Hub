@@ -1,12 +1,13 @@
 "use client"
 
 import Sidebar from "./components/Sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dashboard from "./components/Dashboard";
 import Comments from "./components/Comments";
 import Manage_blog from "./components/Manage_blog";
 import Resources from "./components/Resources";
 import Newblog from "./components/Newblog";
+import { useRouter } from "next/navigation";
 import Services from "./components/Services";
 
 export default function Home() {
@@ -14,6 +15,16 @@ export default function Home() {
   const handleContents = (res:string) => {    
     setSidev(res)
   };
+
+  const router = useRouter();
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/auth/login");
+    } else {
+      router.push("/");
+    }
+  },[router])
   return (
     <>
       <div className="h-screen w-screen flex flex-row overflow-hidden relative">

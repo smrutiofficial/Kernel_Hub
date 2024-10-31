@@ -9,6 +9,7 @@ import { FaCommentAlt } from "react-icons/fa";
 import { SiCrowdsource } from "react-icons/si";
 import { MdDesignServices } from "react-icons/md";
 import { IoLogOut } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 
 const Sidebar = ({
   handlecontents,
@@ -28,6 +29,7 @@ const Sidebar = ({
       ? "border border-emerald-500 rounded-md bg-[#AAFFA9] py-3 text-gray-800 hover:text-gray-600 mb-4"
       : "border-2 hover:border-gray-600 border-transparent rounded-md py-3 text-white hover:text-gray-300 mb-4";
   };
+  const router = useRouter();
 
   return (
     
@@ -108,6 +110,10 @@ const Sidebar = ({
 
       <div className="w-full flex items-center flex-col">
         <button
+          onClick={() => {
+            localStorage.removeItem("token"); 
+            router.push("/auth/login");
+          }}
           className="border-2 w-2/3 flex items-center hover:bg-red-400 bg-opacity-100 hover:bg-opacity-70 
           justify-center font-bold border-gray-700 gap-6 rounded-md py-3 text-white mb-4"
         >

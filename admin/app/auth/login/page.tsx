@@ -16,7 +16,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://kernel-hub.onrender.com/api/auth/login",
+        "https://kernel-hub.onrender.com/api/auth/admin/login",
         { email, password }
       );
       localStorage.setItem("token", response.data.token);
