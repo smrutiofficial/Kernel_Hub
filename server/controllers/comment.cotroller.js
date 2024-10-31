@@ -68,26 +68,20 @@ const getAllComments = async (req, res) => {
 
 // Delete a comment
 const deleteComment = async (req, res) => {
-  const { id} = req.params;
-
+  const { id } = req.params;
   try {
-    const comment = await Comment.findById(id);
-    // res.json(comment)
-    if (!comment) {
-      return res.status(404).json({ msg: "Comment not found" });
-    }
-   
-    // // Optional: Check if the user is the author of the comment
-    // if (comment.author.toString() !== req.user.id) {
-    //   return res.status(403).json({ msg: "User not authorized" });
-    // }
-
-    await comment.remove();
-    res.json({ msg: "Comment deleted" });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+    const deletedcomment = await Comment.findByIdAndDelete(id);
+    if (!deletedcomment)
+      return res.status(404).json({ message: "comment not found" });
+    res.status(200).json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting comment", error });
   }
 };
 
-module.exports = { createComment, getCommentsForPost, getAllComments, deleteComment };
+module.exports = {
+  createComment,
+  getCommentsForPost,
+  getAllComments,
+  deleteComment,
+};
