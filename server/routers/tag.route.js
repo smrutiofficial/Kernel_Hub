@@ -4,7 +4,7 @@ const {
     getTags,
     updateTag,
     deleteTag,
-} = require("../controllers/post.controller");
+} = require("../controllers/tags.controller");
 
 const router = express.Router();
 // Create a new tag
