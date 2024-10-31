@@ -16,7 +16,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "uploads",
+    folder: "profile_pic",
     allowedFormats: ["jpeg", "jpg", "png", "gif"],
     transformation: [
       { quality: "auto" },
@@ -27,7 +27,7 @@ const storage = new CloudinaryStorage({
 // Initialize multer with Cloudinary storage
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 800 * 1024 }, // Limit file size to 800KB
+  limits: { fileSize: 500 * 1024 }, // Limit file size to 500KB
 });
 
 module.exports = { upload };

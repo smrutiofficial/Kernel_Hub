@@ -1,113 +1,85 @@
 <!-- views/apiGuide.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Guide</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        pre {
-            background: #f4f4f4;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        code {
-            color: #d14;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    h1,
+    h2 {
+      color: #333;
+    }
+
+    .route-section {
+      margin-bottom: 20px;
+    }
+
+    .route {
+      margin-left: 20px;
+    }
+
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>API Guide</h1>
+  <h1>API Guide</h1>
 
-    <h2>User Authentication</h2>
-    <h3>Register a User</h3>
-    <p><strong>Method:</strong> POST</p>
-    <p><strong>Endpoint:</strong> /auth/register</p>
-    <p><strong>Description:</strong> Registers a new user with name, email, and password.</p>
-    <pre><code>Request Body:
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
-}
-Response Body:
-{
-  "token": "your_jwt_token_here"
-}</code></pre>
+  <div class="route-section">
+    <h2>Authentication Routes (<code>/api/auth</code>)</h2>
+    <div class="route"><strong>POST</strong> <code>/api/auth/register</code> - Register a new user</div>
+    <div class="route"><strong>POST</strong> <code>/api/auth/login</code> - User login</div>
+    <div class="route"><strong>GET</strong> <code>/api/auth/me</code> - Get logged-in user data (requires
+      authentication)</div>
+    <div class="route"><strong>PUT</strong> <code>/api/auth/me</code> - Update logged-in user data (requires
+      authentication)</div>
+  </div>
 
-    <h3>Login a User</h3>
-    <p><strong>Method:</strong> POST</p>
-    <p><strong>Endpoint:</strong> /auth/login</p>
-    <p><strong>Description:</strong> Logs in a user and returns a JWT token.</p>
-    <pre><code>Request Body:
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
-Response Body:
-{
-  "token": "your_jwt_token_here"
-}</code></pre>
+  <div class="route-section">
+    <h2>Admin Authentication Routes (<code>/api/auth/admin</code>)</h2>
+    <div class="route"><strong>POST</strong> <code>/api/auth/admin/register</code> - Register a new admin</div>
+    <div class="route"><strong>POST</strong> <code>/api/auth/admin/login</code> - Admin login</div>
+    <div class="route"><strong>PUT</strong> <code>/api/auth/admin/me</code> - Update logged-in admin data (requires
+      authentication)</div>
+  </div>
 
-    <h2>Posts</h2>
-    <h3>Create a Post (Authenticated)</h3>
-    <p><strong>Method:</strong> POST</p>
-    <p><strong>Endpoint:</strong> /posts</p>
-    <p><strong>Description:</strong> Creates a new post. Requires authentication.</p>
-    <pre><code>Request Headers:
-x-auth-token: your_jwt_token_here
-Request Body:
-{
-  "title": "My First Post",
-  "body": "This is the content of my first post."
-}
-Response Body:
-{
-  "_id": "unique_post_id",
-  "title": "My First Post",
-  "body": "This is the content of my first post.",
-  "author": "user_id",
-  "createdAt": "2024-10-08T12:34:56.789Z"
-}</code></pre>
+  <div class="route-section">
+    <h2>Post Routes (<code>/api/posts</code>)</h2>
+    <div class="route"><strong>GET</strong> <code>/api/posts</code> - Retrieve all posts</div>
+    <div class="route"><strong>POST</strong> <code>/api/posts/newpost</code> - Create a new post with image upload</div>
+    <div class="route"><strong>GET</strong> <code>/api/posts/:id</code> - Retrieve a specific post by ID</div>
+    <div class="route"><strong>PUT</strong> <code>/api/posts/:id</code> - Update a post by ID</div>
+    <div class="route"><strong>DELETE</strong> <code>/api/posts/:id</code> - Delete a post by ID</div>
+  </div>
 
-    <h3>Get All Posts</h3>
-    <p><strong>Method:</strong> GET</p>
-    <p><strong>Endpoint:</strong> /posts</p>
-    <p><strong>Description:</strong> Fetches all posts with the author's information.</p>
+  <div class="route-section">
+    <h2>Comment Routes (<code>/api/comments</code>)</h2>
+    <div class="route"><strong>POST</strong> <code>/api/comments</code> - Create a new comment on a post (requires
+      authentication)</div>
+    <div class="route"><strong>GET</strong> <code>/api/comments/:postId</code> - Retrieve comments for a specific post
+    </div>
+    <div class="route"><strong>GET</strong> <code>/api/comments</code> - Retrieve all comments</div>
+  </div>
 
-    <h2>Comments</h2>
-    <h3>Create a Comment (Authenticated)</h3>
-    <p><strong>Method:</strong> POST</p>
-    <p><strong>Endpoint:</strong> /comments</p>
-    <p><strong>Description:</strong> Adds a comment to a specific post. Requires authentication.</p>
-    <pre><code>Request Headers:
-x-auth-token: your_jwt_token_here
-Request Body:
-{
-  "body": "This is a great post!",
-  "postId": "unique_post_id"
-}
-Response Body:
-{
-  "_id": "unique_comment_id",
-  "body": "This is a great post!",
-  "author": "user_id",
-  "post": "unique_post_id",
-  "createdAt": "2024-10-08T12:34:56.789Z"
-}</code></pre>
-
-    <h3>Get All Comments for a Post</h3>
-    <p><strong>Method:</strong> GET</p>
-    <p><strong>Endpoint:</strong> /comments/:postId</p>
-    <p><strong>Description:</strong> Fetches all comments for a specific post.</p>
+  <div class="route-section">
+    <h2>Tag Routes (<code>/api/tags</code>)</h2>
+    <div class="route"><strong>POST</strong> <code>/api/tags</code> - Create a new tag</div>
+    <div class="route"><strong>GET</strong> <code>/api/tags</code> - Retrieve all tags</div>
+    <div class="route"><strong>PUT</strong> <code>/api/tags/:id</code> - Update a specific tag by ID</div>
+    <div class="route"><strong>DELETE</strong> <code>/api/tags/:id</code> - Delete a specific tag by ID</div>
+  </div>
 
 </body>
-</html>
 
+</html>

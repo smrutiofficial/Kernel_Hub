@@ -3,6 +3,7 @@ const connectDB = require("./db/db");
 const path = require("path");
 const app = express();
 const cors = require("cors");
+const tagsRouter = require("./routers/tag.route.js");
 
 app.use(cors());
 // Load environment variables from .env file
@@ -22,9 +23,13 @@ app.use(express.static("public"));
 
 // Define routes
 app.use("/api/auth", require("./routers/auth.route.js"));
+app.use("api/auth/admin",require("./routers/admin.route.js"))
 app.use("/api/posts", require("./routers/post.route.js"));
 app.use("/api/comments", require("./routers/comment.route.js")); // Comment routes
 app.use("/", require("./routers/api"));
+// tags routes
+app.use("/api/tags", tagsRouter);
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
