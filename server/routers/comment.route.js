@@ -3,6 +3,7 @@ const {
   createComment,
   getCommentsForPost,
   getAllComments,
+  deleteComment
 } = require("../controllers/comment.cotroller.js");
 const auth = require("../middlewares/auth.middleware.js");
 
@@ -14,4 +15,5 @@ router.post("/", auth, createComment);
 // Get comments for a specific post
 router.get("/:postId", getCommentsForPost);
 router.get('/', getAllComments); 
+router.delete("/:postId", deleteComment);
 module.exports = router;
