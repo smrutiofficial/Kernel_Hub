@@ -6,4 +6,4 @@ const router = express.Router();
 
 router.get('/healthcheck', getHealthStatus);
 
-export default router;
+module.exports = router;
