@@ -3,7 +3,7 @@ const mongoose=require("mongoose");
 const os=require("os");
 const cloudinary=require("cloudinary");
 
-export const getHealthStatus = async (req, res) => {
+const getHealthStatus = async (req, res) => {
   try {
     // Check database connectivity
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
@@ -46,3 +46,6 @@ export const getHealthStatus = async (req, res) => {
     res.status(500).json({ status: 'Unhealthy', error: error.message });
   }
 };
+
+
+module.exports={getHealthStatus}
