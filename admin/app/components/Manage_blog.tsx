@@ -65,14 +65,14 @@ const ManageBlog = () => {
   return (
     <>
       <Popupblog popupst={popupst} setPopupst={setPopupst} cpost={cpost} blogPosts={blogPosts} setBlogPosts={setBlogPosts}/>
-      <div className="p-10 h-svh overflow-y-scroll relative">
+      <div className="p-10 h-svh overflow-y-scroll relative text-white">
         <div className="flex flex-row justify-between items-center">
         <p className="text-xl flex flex-row gap-2 items-center "> <span className="flex flex-row gap-2 items-center hover:text-[#AAFFA9] cursor-pointer"><SiGoogletagmanager/> Manage Blog</span>  <span>/</span>
         </p>
           <select
             value={sortOption}
             onChange={handleSortChange}
-            className="bg-gray-800 w-36 border-2 rounded-md py-2 px-4 border-[#AAFFA9]"
+            className="bg-gray-800 w-36 border-2 text-white rounded-md py-2 px-4 border-[#AAFFA9]"
           >
             <option value="newest">Newest</option>
             <option value="popular">Popular (by no of comments)</option>

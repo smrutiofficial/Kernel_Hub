@@ -35,13 +35,13 @@ export default function Login() {
             {/* image  */}
             <Image src={Bg} alt="bg-image" className="h-full w-full object-cover"></Image>
           </div>
-          <div className="w-1/2 flex flex-col justify-center">
+          <div className="w-1/2 flex flex-col justify-center bg-gray-900">
             <div className="flex flex-col items-center">
             <span className="text-4xl bg-gradient-to-r from-[#AAFFA9] to-emerald-500 text-transparent bg-clip-text font-bold tracking-widest">Admin</span>
-              <h1 className="text-[3rem] font-bold pb-4">
+              <h1 className="text-[3rem] font-bold pb-4 text-white">
                 Kernel <span className="text-[#AAFFA9]"> Hub</span>
               </h1>
-              <p className="text-2xl tracking-[1rem] font-bold">Welcome Back</p>
+              <p className="text-2xl tracking-[1rem] font-bold text-white">Welcome Back</p>
               {/* <p className="text-[1.2rem]">Please login to your account</p> */}
             </div>
             <div className="flex items-center justify-center mt-8">

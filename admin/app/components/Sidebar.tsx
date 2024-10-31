@@ -39,7 +39,7 @@ const Sidebar = ({
             <div className="h-40 w-40 bg-[#AAFFA9] blur-[15rem] absolute -z-2 -bottom-40 right-0"></div>
 
       <div className="relative z-10">
-        <p className="text-3xl font-bold mb-8">
+        <p className="text-3xl font-bold mb-8 text-white">
           Kernal <span className="text-[#AAFFA9]">Hub</span>
         </p>
       </div>

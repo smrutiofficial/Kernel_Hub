@@ -75,7 +75,7 @@ const Newblog = () => {
     console.log(tagarray);
   };
   return (
-    <div className="p-10 w-full h-[99%] overflow-scroll">
+    <div className="p-10 w-full h-[99%] overflow-scroll text-white">
       <p className="text-xl flex items-center gap-2 ">
         <MdNewLabel className="text-2xl" />
         New Blog <span>/</span>
