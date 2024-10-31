@@ -1,14 +1,14 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User.model.js");
+const Admin = require("../models/Admin.model");
 
 const registerAdmin = async (req, res) => {
   const { name, email, password } = req.body;
   try {
-    let user = await User.findOne({ email });
+    let user = await Admin.findOne({ email });
     if (user) return res.status(400).json({ msg: "User already exists" });
 
-    user = new User({ name, email, password });
+    user = new Admin({ name, email, password });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -31,7 +31,7 @@ const registerAdmin = async (req, res) => {
 const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await Admin.findOne({ email });
     if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -67,7 +67,7 @@ const updateAdminData = async (req, res) => {
   const { name, email, password } = req.body; // Get the data from the request body
   try {
     // Find the user by ID from the token
-    const user = await User.findById(req.user.id);
+    const user = await Admin.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }

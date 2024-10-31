@@ -23,7 +23,7 @@ app.use(express.static("public"));
 
 // Define routes
 app.use("/api/auth", require("./routers/auth.route.js"));
-app.use("api/auth/admin",require("./routers/admin.route.js"))
+app.use("/api/auth/admin",require("./routers/admin.route.js"))
 app.use("/api/posts", require("./routers/post.route.js"));
 app.use("/api/comments", require("./routers/comment.route.js")); // Comment routes
 app.use("/", require("./routers/api"));
