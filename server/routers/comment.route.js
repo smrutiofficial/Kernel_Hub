@@ -15,5 +15,5 @@ router.post("/", auth, createComment);
 // Get comments for a specific post
 router.get("/:postId", getCommentsForPost);
 router.get('/', getAllComments); 
-router.delete("/:postId", deleteComment);
+router.delete("/:commentId", deleteComment);
 module.exports = router;
