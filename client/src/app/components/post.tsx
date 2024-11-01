@@ -3,7 +3,8 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 // import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import {upload_link} from "@/app/constants/constant"
+import {upload_link} from "@/app/constants/constant";
+import { useRouter } from "next/navigation";
 // import { useEffect, useState } from 'react'; // Added useState hook
 
 // Define the type for Post data
@@ -25,13 +26,16 @@ interface PostProps {
 }
 
 const Post = ({ postData }: PostProps) => {
-  
+  const router = useRouter();
   return (
     <>
       {postData.map((postItem: PostData) => (
         <div
           key={postItem._id}
-          className="flex flex-col items-center justify-center flex-wrap mb-6 relative
+          onClick={()=>{
+            router.push(`/blog/${postItem._id}`)
+          }}
+          className="flex flex-col cursor-pointer items-center justify-center flex-wrap mb-6 relative
         after:content-[''] after:absolute after:h-full 
         after:w-full after:bg-gradient-to-r 
 

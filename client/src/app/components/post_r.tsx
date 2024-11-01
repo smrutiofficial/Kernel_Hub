@@ -4,6 +4,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 import moment from "moment";
 import Link from "next/link";
 import { upload_link } from "@/app/constants/constant";
+import { useRouter } from "next/navigation";
 
 // Define the type for Post data
 interface PostData {
@@ -24,11 +25,16 @@ interface PostProps {
 const Postr = ({ postData }: PostProps) => {
   // Filter only postData[1] and postData[2]
   const filteredData = postData.slice(1, 3);
+  const router = useRouter();
 
   return (
     <>
       {filteredData.map((post) => (
-        <div key={post.id} className="flex flex-row w-full">
+        <div key={post._id}
+        onClick={()=>{
+          router.push(`/blog/${post._id}`)
+        }}
+        className="flex flex-row w-full cursor-pointer">
           <div className="w-1/2 py-4 pl-4 overflow-hidden">
             <div className="bg-gray-700 h-[17.5rem] overflow-hidden object-cover rounded-tl-lg rounded-bl-lg">
               <img
@@ -43,7 +49,7 @@ const Postr = ({ postData }: PostProps) => {
           <div className="w-1/2 py-4 pr-4 overflow-hidden">
             <div className="bg-gray-800 p-4 h-full rounded-tr-lg rounded-br-lg">
               <div>
-                <Link href={`/blog/${post._id}`} className="flex flex-row gap-4 justify-between items-start">
+                <Link href={`/blog/${post._id}`} className="flex hover:text-[#AAFFA9] flex-row gap-4 justify-between items-start">
                   <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">{post.title}</h1>
                   <p className="text-3xl">
                     <FaArrowTrendUp />

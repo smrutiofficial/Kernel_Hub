@@ -5,6 +5,7 @@ import { FaArrowTrendUp } from "react-icons/fa6";
 import moment from "moment";
 import Link from "next/link";
 import {upload_link} from "@/app/constants/constant"
+import { useRouter } from "next/navigation";
 
 interface PostData {
   _id: number;
@@ -24,7 +25,7 @@ interface PostProps {
 }
 
 const Post_rb = ({ postData }: PostProps) => {
-
+  const router = useRouter();
   return (
     <div>
       <div
@@ -39,8 +40,11 @@ const Post_rb = ({ postData }: PostProps) => {
       >
         {postData.length > 0 && (
           <div
-            key={postData[0].id}
-            className="bg-gray-900 rounded-lg shadow-md p-4 max-h-[40rem]"
+            key={postData[0]._id}
+            onClick={()=>{
+              router.push(`/blog/${postData[0]._id}`)
+            }}
+            className="bg-gray-900 border cursor-pointer rounded-lg shadow-md p-4 max-h-[40rem] "
           >
             <div className="bg-gray-700 w-full h-[22rem] rounded-md overflow-hidden">
               <img
@@ -56,7 +60,7 @@ const Post_rb = ({ postData }: PostProps) => {
               <div className="">
                 <Link
                   href={`/blog/${postData[0]._id}`}
-                  className="flex flex-row gap-4 justify-between items-start"
+                  className="flex flex-row gap-4 justify-between items-start hover:text-[#AAFFA9]"
                 >
                   <h1 className="text-lg mb-2 font-bold h-16 py-2 overflow-hidden">
                     {postData[0].title}
