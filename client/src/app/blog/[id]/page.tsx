@@ -243,7 +243,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                 {post.tags.map((tag: string) => (
                   <button
                     key={tag}
-                    className="border-2 border-[#AAFFA9] text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max rounded-md mb-4 py-2 px-4"
+                    className="border-2 bg-gray-800 border-[#AAFFA9] text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max rounded-md mb-4 py-2 px-4  relative after:absolute after:content-[''] after:block after:bg-gray-800 after:w-full after:h-full after:rounded-md after:-translate-y-1/2 after:top-1/2 after:-translate-x-1/2 after:left-1/2 after:-z-10"
                   >
                     {tag}
                   </button>
