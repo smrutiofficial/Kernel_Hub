@@ -19,7 +19,10 @@ interface ReactionBarProps {
   reaction:Array<Reaction>;
 }
 const ReactionBar = ({ postId, userId,reaction }:ReactionBarProps) => {
-  const [selectedReaction, setSelectedReaction] = useState<Reaction['type'] | null>(null);  const [responses, setResponses] = useState(0);
+  const [selectedReaction, setSelectedReaction] = useState<Reaction['type'] | null>(null); 
+  // const [responses, setResponses] = useState(0);
+
+
   const handleReaction = async (reactionType: Reaction['type']) => {
     setSelectedReaction(reactionType);
     
@@ -31,7 +34,6 @@ const ReactionBar = ({ postId, userId,reaction }:ReactionBarProps) => {
       }, {
         headers: { 'Content-Type': 'application/json' }
       });
-      setResponses(reaction.length)
     } catch (error) {
       console.error('Error adding/updating reaction:', error);
     }
@@ -40,7 +42,7 @@ const ReactionBar = ({ postId, userId,reaction }:ReactionBarProps) => {
   return (
     <div className="bg-gray-900 text-white p-10 rounded-md text-center mt-20">
       <p className="text-gray-200 mb-4 text-2xl font-bold">Join the conversation!</p>
-      <p className="text-[#AAFFA9] text-lg">{responses} Responses</p>
+      <p className="text-[#AAFFA9] text-lg">{reaction.length} Responses</p>
       <div className="flex justify-center gap-6 mt-14">
         {reactionsList.map((reaction) => (
           <button

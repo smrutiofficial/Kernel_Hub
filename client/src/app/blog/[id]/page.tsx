@@ -45,6 +45,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
   const [status, setStatus] = useState("Post Comment"); // New status state
   const [progress, setProgress] = useState(0); // New progress state
   const [processedContent, setProcessedContent] = useState("");
+  const [reaction,setReaction]=useState([]);
 
   useEffect(() => {
     setParamId(params.id);
@@ -56,6 +57,8 @@ export default function PostPage({ params }: { params: { id: string } }) {
         }
         const data = await res.json();
         setPost(data);
+        setReaction(data.reactions)
+        
         setLoading(false);
       } catch (err) {
         setError(
@@ -249,7 +252,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
               </div>
-              <ReactionBar postId={post._id} userId={profile._id} reaction={post.reactions}/>
+              <ReactionBar postId={post._id} userId={profile._id} reaction={reaction}/>
               <hr className="mt-8 opacity-30" />
 
               <div className="mt-6 flex items-center">
