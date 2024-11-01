@@ -18,6 +18,7 @@ import Image from "next/image";
 import bg from "@/app/image/grain.jpg";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
 import Preloader from '@/app/components/preloader';
+import ReactionBar from "@/app/components/ReactionBar";
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,6 +34,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
   const [profile, setProfile] = useState({
     name: "",
     email: "",
+    _id:""
   });
   
 
@@ -87,6 +89,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
           setProfile({
             name: response.data.name,
             email: response.data.email,
+            _id:response.data._id
           });
         } catch (err) {
           console.error(err);
@@ -246,6 +249,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
               </div>
+              <ReactionBar postId={post._id} userId={profile._id} reaction={post.reactions}/>
               <hr className="mt-8 opacity-30" />
 
               <div className="mt-6 flex items-center">
