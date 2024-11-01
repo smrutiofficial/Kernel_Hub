@@ -7,6 +7,7 @@ const {
   getPostById,
   updatePost,
   deletePost,
+  addOrUpdateReaction,
 } = require("../controllers/post.controller.js");
 // const auth = require("../middlewares/auth.middleware.js"); // We'll implement this middleware next
 
@@ -24,5 +25,7 @@ router.get("/:id", getPostById);
 router.put("/:id", updatePost);
 // Delete a post
 router.delete("/:id", deletePost);
+// add or update reactions
+router.post('/:postId/reaction', addOrUpdateReaction);
 
 module.exports = router;

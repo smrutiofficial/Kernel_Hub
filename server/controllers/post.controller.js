@@ -9,7 +9,7 @@ const createPost = async (req, res) => {
 
     const { title, slug, tags, content } = req.body;
     // const imagePath = req.file.path; // Adjust if needed
-    const imagename=req.file.filename;
+    const imagename = req.file.filename;
 
     // console.log("Image Path:", imagePath); // Log the image path for debugging
     // console.log("Image name:", imagename); // Log the image path for debugging
@@ -23,12 +23,11 @@ const createPost = async (req, res) => {
     });
 
     // console.log(newPost);
-    
+
     // Add your logic to save `newPost` to the database here
     // Save the post
     const post = await newPost.save();
     res.json(post);
-
   } catch (error) {
     console.error("Error creating post:", error);
     res.status(500).json({ message: "Error creating post", error });
@@ -131,4 +130,40 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getPosts, getPostById, updatePost, deletePost };
+// Add or Update Reaction
+const addOrUpdateReaction = async (req, res) => {
+  const { postId } = req.params;
+  const { userId, reactionType } = req.body;
+
+  try {
+    // Find the post and check if the user has already reacted
+    let post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    const existingReactionIndex = post.reactions.findIndex(
+      (reaction) => reaction.userId.toString() === userId
+    );
+
+    if (existingReactionIndex >= 0) {
+      // Update existing reaction
+      post.reactions[existingReactionIndex].type = reactionType;
+    } else {
+      // Add new reaction
+      post.reactions.push({ userId, type: reactionType });
+    }
+
+    await post.save();
+    return res.status(200).json(post);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+module.exports = {
+  createPost,
+  getPosts,
+  getPostById,
+  updatePost,
+  deletePost,
+  addOrUpdateReaction,
+};
