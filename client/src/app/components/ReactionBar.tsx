@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {backend_link} from '@/app/constants/constant';
 import axios from 'axios';
 
-const reactionsList = [
+const reactionsList : Array<{ type: Reaction['type']; label: string; icon: string }> = [
   { type: 'smile', label: 'ACE!', icon: '👍' },
   { type: 'heart', label: 'LOVE!', icon: '❤️' },
   { type: 'angry', label: 'URGH!', icon: '😡' },
@@ -19,10 +19,8 @@ interface ReactionBarProps {
   reaction:Array<Reaction>;
 }
 const ReactionBar = ({ postId, userId,reaction }:ReactionBarProps) => {
-  const [selectedReaction, setSelectedReaction] = useState(null);
-  const [responses, setResponses] = useState(0); // Example response count
-
-  const handleReaction = async (reactionType) => {
+  const [selectedReaction, setSelectedReaction] = useState<Reaction['type'] | null>(null);  const [responses, setResponses] = useState(0);
+  const handleReaction = async (reactionType: Reaction['type']) => {
     setSelectedReaction(reactionType);
     
     try {
