@@ -37,6 +37,10 @@ export default function PostPage({ params }: { params: { id: string } }) {
     _id:""
   });
   
+  type Reaction = {
+    userId: string;
+    type: 'smile' | 'heart' | 'angry' | 'surprise' | 'laugh';
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000); // Simulate loading time
@@ -45,7 +49,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
   const [status, setStatus] = useState("Post Comment"); // New status state
   const [progress, setProgress] = useState(0); // New progress state
   const [processedContent, setProcessedContent] = useState("");
-  const [reaction,setReaction]=useState([]);
+  const [reaction, setReaction] = useState<Reaction[]>([]);
 
   useEffect(() => {
     setParamId(params.id);
@@ -252,7 +256,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   dangerouslySetInnerHTML={{ __html: processedContent }}
                 />
               </div>
-              <ReactionBar postId={post._id} userId={profile._id} reaction={reaction}/>
+              <ReactionBar postId={post._id} userId={profile._id} reaction={reaction} setReaction={setReaction}/>
               <hr className="mt-8 opacity-30" />
 
               <div className="mt-6 flex items-center">

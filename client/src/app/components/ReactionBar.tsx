@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import {backend_link} from '@/app/constants/constant';
 import axios from 'axios';
+import { Dispatch, SetStateAction } from 'react';
+
 
 const reactionsList : Array<{ type: Reaction['type']; label: string; icon: string }> = [
   { type: 'smile', label: 'ACE!', icon: '👍' },
@@ -16,9 +18,10 @@ interface Reaction {
 interface ReactionBarProps {
   postId: string;
   userId: string;
-  reaction:Array<Reaction>;
+  reaction:Reaction[];
+  setReaction: Dispatch<SetStateAction<Reaction[]>>;
 }
-const ReactionBar = ({ postId, userId,reaction }:ReactionBarProps) => {
+const ReactionBar = ({ postId, userId,reaction,setReaction}:ReactionBarProps) => {
   const [selectedReaction, setSelectedReaction] = useState<Reaction['type'] | null>(null); 
   // const [responses, setResponses] = useState(0);
 
@@ -34,6 +37,8 @@ const ReactionBar = ({ postId, userId,reaction }:ReactionBarProps) => {
       }, {
         headers: { 'Content-Type': 'application/json' }
       });
+      const { data } = await axios.get(`${backend_link}/api/posts/${postId}`);
+      setReaction(data.reactions);
     } catch (error) {
       console.error('Error adding/updating reaction:', error);
     }
