@@ -44,7 +44,7 @@ const Post_rb = ({ postData }: PostProps) => {
             onClick={()=>{
               router.push(`/blog/${postData[0]._id}`)
             }}
-            className="bg-gray-900 border cursor-pointer rounded-lg shadow-md p-4 max-h-[40rem] "
+            className="bg-gray-900 cursor-pointer rounded-lg shadow-md p-4 max-h-[40rem] "
           >
             <div className="bg-gray-700 w-full h-[22rem] rounded-md overflow-hidden">
               <img

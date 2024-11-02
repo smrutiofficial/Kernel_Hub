@@ -1,7 +1,38 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
+import { backend_link } from "@/app/constants/constant";
 
 const Dashboard = () => {
+  interface Health {
+    status: string;
+    data: {
+      database: {
+        status: string;
+        responseTime: string;
+      };
+      cloudinary: {
+        status: string;
+      };
+      server: {
+        uptime: string;
+        memoryUsage: string;
+      };
+    };
+  }
+  const [health, setHealth] = useState<Health | null>(null);
+  useEffect(() => {
+    const featchhealth = async () => {
+      try {
+        const health = await axios.get(`${backend_link}/api/healthcheck`);
+        setHealth(health.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    featchhealth();
+  }, []);
+
   return (
     <div className="p-10 h-full overflow-hidden relative text-white">
       <div className="h-[28rem] w-[28rem] bg-emerald-200 blur-[10rem] top-[10%] left-[15%] absolute -z-9"></div>
@@ -60,13 +91,88 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="flex justify-between flex-row h-[32%]">
-              <div className="bg-gray-800 rounded-lg w-[48.7%] h-full">m</div>
-              <div className="rounded-lg w-[48.7%] h-full bg-gray-800">t</div>
+              <div className="bg-gray-800 rounded-lg w-[48.7%] h-full p-8">
+                <p className="text-xl font-bold text-[#AAFFA9]">Active Users</p>
+              </div>
+
+              <div className="rounded-lg w-[48.7%] h-full bg-gray-800 py-6">
+                <div className="text-xl font-bold text-[#AAFFA9] flex flex-col justify-center items-center">
+                  <div className="w-24 h-24 bg-gray-600 rounded-full"></div>
+                  <p className="text-md font-normal text-white mt-2">
+                    Smruti Praksh Rout
+                  </p>
+                  <p className="text-sm font-normal text-gray-300">
+                    smrutiprakashrout3@gmail.com
+                  </p>
+                  <button className="text-sm bg-gray-600 px-4 py-2 rounded-md mt-3">
+                    Edit
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="rounded-lg h-[32%] bg-gray-800 p-10">
+            <div className="rounded-lg h-[32%] bg-gray-800 py-6 px-20">
+              <p className="text-xl mb-2 font-bold text-[#AAFFA9] -mx-10">
+                Health Check
+              </p>
+              {health ? (
+                <div className="flex flex-col gap-2">
+                  <p className="flex items-center justify-between px-10">
+                    Server Status:{" "}
+                    <span className="bg-[#AAFFA9] bg-opacity-25 px-4 py-1 rounded-md flex flex-row items-center gap-4">
+                      {" "}
+                      {health.status}{" "}
+                      <span className="h-2 w-2 bg-green-500  rounded-full animate-pulse"></span>
+                    </span>
+                  </p>
 
-            <p className="text-xl font-bold text-[#AAFFA9]">Helth Check</p>
+                  <p className="flex items-center justify-between px-10">
+                    Database Status:{" "}
+                    <span className="bg-green-500 bg-opacity-25 px-4 py-1 rounded-md flex flex-row items-center gap-4">
+                      {" "}
+                      {health.data.database.status}{" "}
+                      <span className="h-2 w-2 bg-green-500  rounded-full animate-ping"></span>
+                    </span>
+                  </p>
+                  <p className="flex items-center justify-between px-10">
+                    Cloudinary Status:{" "}
+                    <span className="bg-green-500 bg-opacity-25 px-4 py-1 rounded-md flex flex-row items-center gap-4">
+                      {" "}
+                      {health.data.cloudinary.status}{" "}
+                      <span className="h-2 w-2 bg-green-500  rounded-full animate-ping"></span>
+                    </span>
+                  </p>
 
+                  <p className="flex items-center justify-between px-10">
+                    Response Time:
+                    <span
+                      className={`${
+                        parseInt(health.data.database.responseTime) <= 50
+                          ? "bg-green-500"
+                          : parseInt(health.data.database.responseTime) <= 100
+                          ? "bg-yellow-500"
+                          : parseInt(health.data.database.responseTime) <= 200
+                          ? "bg-orange-500"
+                          : "bg-red-500"
+                      } bg-opacity-25 px-4 py-1 rounded-md flex flex-row items-center gap-4`}
+                    >
+                      {health.data.database.responseTime}
+                      <span
+                        className={`h-2 w-2 ${
+                          parseInt(health.data.database.responseTime) <= 50
+                            ? "bg-green-500"
+                            : parseInt(health.data.database.responseTime) <= 100
+                            ? "bg-yellow-500"
+                            : parseInt(health.data.database.responseTime) <= 200
+                            ? "bg-orange-500"
+                            : "bg-red-500"
+                        } rounded-full animate-bounce`}
+                      ></span>
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <p>Loading...</p>
+              )}
             </div>
           </div>
         </div>

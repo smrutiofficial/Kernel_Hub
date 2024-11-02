@@ -21,6 +21,10 @@ import {
 } from "@/components/ui/alert-dialog";
 
 interface BlogComments {
+  author: {
+    email: string;
+    name: string;
+  };
   _id: string;
   body: string;
   createdAt: string;
@@ -37,7 +41,6 @@ const Comments = () => {
   const [hoveredPostId, setHoveredPostId] = useState<string | null>(null);
   const [cpage, setCpage] = useState(1);
   const [totalpage, SetTotalpage] = useState(0);
-
 
   useEffect(() => {
     const fetchBlogPosts = async () => {
@@ -76,13 +79,24 @@ const Comments = () => {
 
       <div className="h-[86%]">
         <div className="flex flex-row justify-between mt-4 font-bold capitalize text-md bg-gray-800 rounded-md border border-gray-600 py-1">
-          <div className="flex flex-row gap-10 w-[90%] py-1 justify-center items-center px-4">
-            <p className="max-w-10 w-10">id</p>
-            <div className="w-[70%] max-w-[70%]">
-              <p className="">Title</p>
+          
+          <div className="flex flex-row gap-4 w-[90%] py-1 justify-center items-center ">
+            
+            <div className="w-[5%]">
+              <p className="text-center">id</p>
             </div>
-            <div className="py-1 px-2">
-              <p>Created At</p>
+            
+            <div className="w-[35%]">
+              <p className="">Comments</p>
+            </div>
+            
+            <div className="w-[35%] flex flex-row justify-around">
+              <p className="w-[50%] text-center">User ID</p>
+              <p className="w-[50%] text-center">User Name</p>
+            </div>
+            
+            <div className="w-[15%]">
+              <p className="text-center">Created At</p>
             </div>
             {/* <p>Updated At: {new Date(post.updatedAt).toLocaleDateString()}</p> */}
           </div>
@@ -99,24 +113,34 @@ const Comments = () => {
             onMouseLeave={() => setHoveredPostId(null)}
             className="flex mt-2 flex-row justify-between hover:border hover:bg-lime-100 hover:bg-opacity-10 hover:border-gray-500 border border-gray-600 rounded-md relative transition-all duration-300 ease-in-out cursor-pointer"
           >
-            <div className="flex flex-row gap-10 w-[90%] rounded-md py-1 justify-center items-center px-4">
-              <p className="max-w-10 w-10">
+            <div className="flex flex-row gap-4 w-[90%] rounded-md py-1 justify-center items-center ">
+              
+              <div className="w-[5%]">
+              <p className="text-center">
                 {((cpage - 1) * 12 + blogComments.indexOf(cmt) + 1)
                   .toString()
                   .padStart(2, "0")}
               </p>
-              <div className="w-[70%] max-w-[70%]">
+              </div>
+
+              <div className="w-[35%] max-w-[35%]">
                 <p className="">{cmt.body}</p>
               </div>
+
+              <div className="w-[35%] flex flex-row justify-around">
+                <p className="w-[50%] text-center">{cmt.author.email}</p>
+                <p className="w-[50%] text-center">{cmt.author.name}</p>
+              </div>
+
               <div
-                className={`border py-1 px-2 rounded-md border-gray-500
+                className={`border w-[15%] py-1 px-2 rounded-md border-gray-500
               ${
                 hoveredPostId === cmt._id
                   ? "bg-yellow-400 bg-opacity-50 text-gray-100"
                   : ""
               } `}
               >
-                <p>{moment(cmt.createdAt).format("Do MMM YYYY")}</p>
+                <p className="text-center">{moment(cmt.createdAt).format("Do MMM YYYY")}</p>
               </div>
               {/* <p>Updated At: {new Date(post.updatedAt).toLocaleDateString()}</p> */}
             </div>
