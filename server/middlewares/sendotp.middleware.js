@@ -1,12 +1,17 @@
 const nodemailer = require("nodemailer");
 
-let otpStore = {}; // Temporary storage for OTPs. Use a database or caching in production.
+let otpStore = {};
 
 const transporter = nodemailer.createTransport({
-  service: "smtp.gmail.com", // Replace with your email service
+  service: "smtp.gmail.com", 
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false, 
   },
 });
 
