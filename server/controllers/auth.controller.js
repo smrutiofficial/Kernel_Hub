@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User.model.js");
+const {sendWelcomeEmail}=require("../utils/signup_welcome.js")
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -16,6 +17,8 @@ const registerUser = async (req, res) => {
 
     await user.save();
 
+    // Send welcome email
+    await sendWelcomeEmail(email, name);
     // Create and return JWT token
     const payload = { user: { id: user.id } };
     jwt.sign(payload, "secretToken", { expiresIn: 360000 }, (err, token) => {

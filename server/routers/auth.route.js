@@ -6,11 +6,14 @@ const {
   updateUserData, 
 } = require("../controllers/auth.controller.js");
 const authMiddleware = require("../middlewares/auth.middleware"); // Import your middleware
-
+const {verifyOtp}  =require("../middlewares/otpverify.middleware.js")
+const {sendOtp}=require("../middlewares/sendotp.middleware")
 const router = express.Router();
 
+
+router.post("/register", sendOtp);
 // Register user
-router.post("/register", registerUser);
+router.post("/register/complete",verifyOtp, registerUser);
 
 // Login user
 router.post("/login", loginUser);
