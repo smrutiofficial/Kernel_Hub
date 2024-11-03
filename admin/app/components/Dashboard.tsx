@@ -24,7 +24,7 @@ const Dashboard = () => {
   useEffect(() => {
     const featchhealth = async () => {
       try {
-        const health = await axios.get(`${backend_link}/api/healthcheck`);
+        const health = await axios.get(`${backend_link}/api/health`);
         setHealth(health.data);
       } catch (err) {
         console.log(err);
