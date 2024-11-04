@@ -84,14 +84,6 @@ const Popupblog: React.FC<PopupblogProps> = ({
 
     fetchTags();
   }, [cpost, image]);
-  // const handleDelete = async (postId: string) => {
-  //   try {
-  //     await axios.delete(`http://localhost:5000/api/posts/${postId}`);
-  //     setBlogPosts(blogPosts.filter(post => post._id !== postId));
-  //   } catch (error) {
-  //     console.error("Error deleting blog post:", error);
-  //   }
-  // };
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -110,6 +102,7 @@ const Popupblog: React.FC<PopupblogProps> = ({
           slug,
           content,
           image: imageBuffer,
+          tags: tagarray,
         }
       );
       setBlogPosts(
