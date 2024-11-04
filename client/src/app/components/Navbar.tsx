@@ -33,21 +33,21 @@ const Navbar = () => {
           </li>
 
           <li>
-            <Link href="/services">
+            <Link href="/resources">
             <p className="text-gray-400 hover:text-yellow-300">
               Resources
             </p>
             </Link>
           </li>
           <li>
-            <Link href="/contact">
+            <Link href="/community">
             <p className="text-gray-400 hover:text-yellow-300">
               Community
             </p>
             </Link>
           </li>
           <li>
-            <Link href="/contact">
+            <Link href="/feedback">
             <p className="text-gray-400 hover:text-yellow-300">
               Feedback
             </p>

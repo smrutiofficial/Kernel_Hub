@@ -163,7 +163,7 @@ export default function Register() {
 
               <button
                 onClick={Registeruser}
-                className="text-gray-600 px-10 py-2 rounded-xl bg-[#AAFFA9] mt-8"
+                className="text-gray-600 px-10 py-2 rounded-md bg-[#AAFFA9] mt-8"
               >
                 Submit
               </button>

@@ -235,7 +235,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                 <img
                   src={`${upload_link}/${post.image}`}
                   alt=""
-                  className="w-[97%] h-[96%] object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
