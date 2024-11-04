@@ -1,10 +1,7 @@
 import { SiCrowdsource } from "react-icons/si";
 import { useState, useEffect } from "react";
 import axios from "axios";
-// import { RiEdit2Fill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
-// import Popupblog from "./Popupblog";
-// import { SiGoogletagmanager } from "react-icons/si";
 import Pagination from "./Pagination";
 import moment from "moment";
 import { backend_link } from "@/app/constants/constant";
@@ -48,9 +45,10 @@ const Comments = () => {
         const response = await axios.get<BlogResponse>(
           `${backend_link}/api/comments?page=${cpage}`
         );
-        setBlogComments(response.data.comments); // Now correctly accessing posts
+        setBlogComments(response.data.comments);
         setCpage(response.data.currentPage);
         SetTotalpage(response.data.totalPages);
+        
       } catch (error) {
         console.error("Error fetching blog posts:", error);
       }
@@ -79,28 +77,21 @@ const Comments = () => {
 
       <div className="h-[86%]">
         <div className="flex flex-row justify-between mt-4 font-bold capitalize text-md bg-gray-800 rounded-md border border-gray-600 py-1">
-          
           <div className="flex flex-row gap-4 w-[90%] py-1 justify-center items-center ">
-            
             <div className="w-[5%]">
               <p className="text-center">id</p>
             </div>
-            
             <div className="w-[35%]">
               <p className="">Comments</p>
             </div>
-            
             <div className="w-[35%] flex flex-row justify-around">
               <p className="w-[50%] text-center">User ID</p>
               <p className="w-[50%] text-center">User Name</p>
             </div>
-            
             <div className="w-[15%]">
               <p className="text-center">Created At</p>
             </div>
-            {/* <p>Updated At: {new Date(post.updatedAt).toLocaleDateString()}</p> */}
           </div>
-
           <div className="w-[10%] flex flex-row justify-center items-center gap-4 capitalize text-md bg-gray-800">
             Actions
           </div>
@@ -114,43 +105,36 @@ const Comments = () => {
             className="flex mt-2 flex-row justify-between hover:border hover:bg-lime-100 hover:bg-opacity-10 hover:border-gray-500 border border-gray-600 rounded-md relative transition-all duration-300 ease-in-out cursor-pointer"
           >
             <div className="flex flex-row gap-4 w-[90%] rounded-md py-1 justify-center items-center ">
-              
               <div className="w-[5%]">
-              <p className="text-center">
-                {((cpage - 1) * 12 + blogComments.indexOf(cmt) + 1)
-                  .toString()
-                  .padStart(2, "0")}
-              </p>
+                <p className="text-center">
+                  {((cpage - 1) * 12 + blogComments.indexOf(cmt) + 1)
+                    .toString()
+                    .padStart(2, "0")}
+                </p>
               </div>
-
               <div className="w-[35%] max-w-[35%]">
                 <p className="">{cmt.body}</p>
               </div>
-
               <div className="w-[35%] flex flex-row justify-around">
-                <p className="w-[50%] text-center">{cmt.author.email}</p>
-                <p className="w-[50%] text-center">{cmt.author.name}</p>
+                <p className="w-[50%] text-center">{cmt.author?.email}</p>
+                <p className="w-[50%] text-center">{cmt.author?.name}</p>
               </div>
-
               <div
-                className={`border w-[15%] py-1 px-2 rounded-md border-gray-500
-              ${
-                hoveredPostId === cmt._id
-                  ? "bg-yellow-400 bg-opacity-50 text-gray-100"
-                  : ""
-              } `}
+                className={`border w-[15%] py-1 px-2 rounded-md border-gray-500 ${
+                  hoveredPostId === cmt._id
+                    ? "bg-yellow-400 bg-opacity-50 text-gray-100"
+                    : ""
+                }`}
               >
-                <p className="text-center">{moment(cmt.createdAt).format("Do MMM YYYY")}</p>
+                <p className="text-center">
+                  {moment(cmt.createdAt).format("Do MMM YYYY")}
+                </p>
               </div>
-              {/* <p>Updated At: {new Date(post.updatedAt).toLocaleDateString()}</p> */}
             </div>
-
             <div className="w-[10%] flex flex-row justify-center items-center gap-4 text-xl">
               <AlertDialog>
                 <AlertDialogTrigger>
                   <MdDelete
-                    // onClick={() => handleDelete(cmt._id)}
-                    // onClick={() => <Dilog />}
                     className={`h-[70%] w-8 p-1 rounded-md ${
                       hoveredPostId === cmt._id
                         ? "bg-red-400 text-gray-700"

@@ -1,8 +1,14 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdNewLabel } from "react-icons/md";
-import {backend_link} from "@/app/constants/constant";
+import { backend_link } from "@/app/constants/constant";
+type Tag = {
+  _id: string;
+  tagname: string;
+  __v: number;
+};
+
 
 const Newblog = () => {
   const [image, setImage] = useState<File | null>(null); // Specify type as string | null
@@ -12,6 +18,7 @@ const Newblog = () => {
   const [tags, setTags] = useState("");
   const [content, setContent] = useState("");
   const [tagarray, setTagarray] = useState<string[]>([]);
+  const [tagvalue, setTagvalue] = useState<Tag[]>([]);
   const [status, setStatus] = useState("Publish");
   const [progress, setProgress] = useState(0);
 
@@ -21,7 +28,18 @@ const Newblog = () => {
       setImage(e.target.files[0]);
     }
   };
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const res = await axios.get(`${backend_link}/api/tags`);
+        setTagvalue(res.data); // Set the state with the data
+      } catch (error) {
+        console.error("Error fetching tags:", error);
+      }
+    };
 
+    fetchTags();
+  }, []);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("Loading...");
@@ -35,23 +53,19 @@ const Newblog = () => {
       formData.append("tags", tagarray.join(","));
       formData.append("content", content);
 
-      await axios.post(
-        `${backend_link}/api/posts/newpost`,
-        formData,
-        {
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.total) {
-              const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setProgress(percentCompleted);
-            } else {
-              // Handle case where total is undefined
-              setProgress(0); // Optionally, keep progress as 0 if the total is undefined
-            }
-          },
-        }
-      );
+      await axios.post(`${backend_link}/api/posts/newpost`, formData, {
+        onUploadProgress: (progressEvent) => {
+          if (progressEvent.total) {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percentCompleted);
+          } else {
+            // Handle case where total is undefined
+            setProgress(0); // Optionally, keep progress as 0 if the total is undefined
+          }
+        },
+      });
 
       setStatus("Post");
       alert("Your post was successfully published");
@@ -70,9 +84,7 @@ const Newblog = () => {
   };
 
   const handeltags = (newItem: string) => {
-    console.log("new one");
     setTagarray((prevItems) => [...prevItems, newItem]);
-    console.log(tagarray);
   };
   return (
     <div className="p-10 w-full h-[99%] overflow-scroll text-white">
@@ -108,8 +120,8 @@ const Newblog = () => {
               className="mt-1 w-[90%] resize-none h-28 py-4 border-2 border-gray-500 px-10 font-bold bg-gray-800 block rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
             />
           </div>
-          <div className="w-[90%] flex-row items-center gap-4 flex">
-            <div className="w-full flex flex-row  items-center">
+          <div className="w-[90%] flex-row items-end gap-4 flex">
+            <div className="w-full flex flex-row  items-end">
               {image && (
                 <div className=" relative">
                   <div className="h-36 w-[18rem] flex justify-center items-center mr-4 rounded-md relative overflow-hidden bg-gray-800 object-cover">
@@ -158,14 +170,20 @@ const Newblog = () => {
             </div>
             <div className="w-full flex flex-col items-end">
               <div className="flex flex-row justify-center items-center gap-4 w-full">
-                {tagarray.map((itemof, index) => (
-                  <p
-                    key={index}
-                    className="border border-[#AAFFA9] py-2 px-4 rounded-md mb-2"
-                  >
-                    {itemof}
+                {tagarray && tagarray.length > 0 ? (
+                  tagarray.map((itemof, index) => (
+                    <p
+                      key={index}
+                      className="border border-[#AAFFA9] py-2 px-4 rounded-md mb-2"
+                    >
+                      {itemof}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-gray-500 border border-dashed px-4 py-2 mb-2 rounded-md">
+                    No tag chosen yet
                   </p>
-                ))}
+                )}
               </div>
               <select
                 id="tags"
@@ -175,15 +193,12 @@ const Newblog = () => {
                 className="mt-1 border-2 border-dashed border-gray-400 px-10 w-full block h-12 bg-gray-800 rounded-md shadow-sm focus:outline-none focus:ring-[#AAFFA9] focus:border-[#AAFFA9] sm:text-sm"
               >
                 <option value="">Select a tag</option>
-                <option value="tag1" onClick={() => handeltags("tag1")}>
-                  tag1
-                </option>
-                <option value="tag2" onClick={() => handeltags("tag2")}>
-                  tag2
-                </option>
-                <option value="tag3" onClick={() => handeltags("tag3")}>
-                  tag3
-                </option>
+                {tagvalue.map((tag) => (
+                  <option key={tag._id} value={tag.tagname} onClick={() => handeltags(tag.tagname)}>
+                    {tag.tagname}
+                  </option>
+                ))}
+
                 {/* Add more options as needed */}
               </select>
             </div>
