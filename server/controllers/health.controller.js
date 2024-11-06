@@ -8,10 +8,17 @@ const getHealthStatus = async (req, res) => {
   try {
     // Check database connectivity
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
-    const dbResponseStart = process.hrtime();
-    await mongoose.connection.db.command({ ping: 1 });
-    const dbResponseEnd = process.hrtime(dbResponseStart);
-    const dbResponseTime = Math.round((dbResponseEnd[0] * 1e9 + dbResponseEnd[1]) / 1e6); // in ms
+    let dbResponseTime = 'N/A';
+
+    if (mongoose.connection.db) {
+      const dbResponseStart = process.hrtime();
+      // Attempt a simple operation instead of command({ ping: 1 })
+      await mongoose.connection.db.admin().ping();
+      const dbResponseEnd = process.hrtime(dbResponseStart);
+      dbResponseTime = Math.round((dbResponseEnd[0] * 1e9 + dbResponseEnd[1]) / 1e6); // in ms
+    } else {
+      console.error("Database connection is not properly established.");
+    }
 
     // Check Cloudinary connectivity
     let cloudinaryStatus = 'Disconnected';
@@ -47,6 +54,7 @@ const getHealthStatus = async (req, res) => {
     res.status(500).json({ status: 'Unhealthy', error: error.message });
   }
 };
+
 
 
 module.exports={getHealthStatus}
