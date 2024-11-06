@@ -4,6 +4,8 @@ import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { backend_link } from "@/app/constants/constant";
 import Activeuser from "@/app/components/Activeuser";
 import StorageInfo from "@/app/components/Storageinfo";
+import Image from "next/image";
+import Self from "@/app/image/self.jpeg";
 const Dashboard = () => {
   interface Health {
     status: string;
@@ -51,7 +53,7 @@ const Dashboard = () => {
         <div className="w-[40%]">
           {/*  */}
           <div className="w-full h-full flex flex-col justify-between">
-            <div className="bg-gray-800 rounded-lg h-[32%] p-8 flex flex-col justify-between">
+            <div className="bg-gray-800 rounded-lg h-[32%] p-8 flex flex-col justify-center gap-6">
               {/* web analices */}
               <div className="">
                 <p className="text-xl font-bold text-[#AAFFA9]">
@@ -60,32 +62,32 @@ const Dashboard = () => {
                 <p className="text-gray-400">Total 28.5% Conversion Rate</p>
               </div>
               <div className="">
-                <p className=" font-bold mb-2 text-xl text-[#AAFFA9]">
+                {/* <p className=" font-bold mb-2 text-xl text-[#AAFFA9]">
                   Traffic
-                </p>
+                </p> */}
                 <div className="w-[72%] grid grid-cols-2 grid-rows-2 h-max gap-x-6 gap-y-4 mt-2 text-white">
                   <div className="text-sm flex flex-row gap-4 justify-between">
                     <p className="">Session</p>
                     <p className="border border-gray-600 px-4 rounded-md font-bold bg-gray-800">
-                      0
+                      23
                     </p>
                   </div>
                   <div className="text-sm flex flex-row gap-4 justify-between">
                     <p className="">Page Views</p>
                     <p className="border border-gray-600 px-4 rounded-md font-bold bg-gray-800">
-                      0
+                      92
                     </p>
                   </div>
                   <div className="text-sm flex flex-row gap-4 justify-between">
                     <p className="">Total User</p>
                     <p className="border border-gray-600 px-4 rounded-md font-bold bg-gray-800">
-                      0
+                      68
                     </p>
                   </div>
                   <div className="text-sm flex flex-row gap-4 justify-between">
                     <p className="">Comments</p>
                     <p className="border border-gray-600 px-4 rounded-md font-bold bg-gray-800">
-                      0
+                      156
                     </p>
                   </div>
                 </div>
@@ -99,7 +101,9 @@ const Dashboard = () => {
 
               <div className="rounded-lg w-[48.7%] h-full bg-gray-800 py-6">
                 <div className="text-xl font-bold text-[#AAFFA9] flex flex-col justify-center items-center">
-                  <div className="w-24 h-24 bg-gray-600 rounded-full"></div>
+                  <div className="w-24 h-24 bg-gray-600 rounded-full overflow-hidden">
+                    <Image src={Self} alt="" width={100} height={100}/>
+                  </div>
                   <p className="text-md font-normal text-white mt-2">
                     Smruti Praksh Rout
                   </p>
