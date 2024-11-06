@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { TbLayoutDashboardFilled } from "react-icons/tb";
 import { backend_link } from "@/app/constants/constant";
-
+import Activeuser from "@/app/components/Activeuser";
+import StorageInfo from "@/app/components/Storageinfo";
 const Dashboard = () => {
   interface Health {
     status: string;
@@ -90,9 +91,10 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between flex-row h-[32%]">
-              <div className="bg-gray-800 rounded-lg w-[48.7%] h-full p-8">
-                <p className="text-xl font-bold text-[#AAFFA9]">Active Users</p>
+            <div className="flex justify-between flex-row  h-[32%]">
+              <div className="bg-gray-800 flex flex-col justify-center rounded-lg w-[48.7%] h-full">
+                {/* <p className="text-xl font-bold text-[#AAFFA9]">Active Users</p> */}
+                <Activeuser value={120} percentageChange={5.2} period="January - June 2024"/>
               </div>
 
               <div className="rounded-lg w-[48.7%] h-full bg-gray-800 py-6">
@@ -104,7 +106,7 @@ const Dashboard = () => {
                   <p className="text-sm font-normal text-gray-300">
                     smrutiprakashrout3@gmail.com
                   </p>
-                  <button className="text-sm bg-gray-600 px-4 py-2 rounded-md mt-3">
+                  <button className="text-sm w-[80%] bg-gray-600 px-4 py-2 rounded-md mt-3">
                     Edit
                   </button>
                 </div>
@@ -116,7 +118,7 @@ const Dashboard = () => {
               </p>
               {health ? (
                 <div className="flex flex-col gap-2">
-                  <p className="flex items-center justify-between px-10">
+                  <p className="flex items-center justify-between px-2">
                     Server Status:{" "}
                     <span className="bg-[#AAFFA9] bg-opacity-25 px-4 py-1 rounded-md flex flex-row items-center gap-4">
                       {" "}
@@ -125,7 +127,7 @@ const Dashboard = () => {
                     </span>
                   </p>
 
-                  <p className="flex items-center justify-between px-10">
+                  <p className="flex items-center justify-between px-2">
                     Database Status:{" "}
                     <span className="bg-green-500 bg-opacity-25 px-4 py-1 rounded-md flex flex-row items-center gap-4">
                       {" "}
@@ -133,7 +135,7 @@ const Dashboard = () => {
                       <span className="h-2 w-2 bg-green-500  rounded-full animate-ping"></span>
                     </span>
                   </p>
-                  <p className="flex items-center justify-between px-10">
+                  <p className="flex items-center justify-between px-2">
                     Cloudinary Status:{" "}
                     <span className="bg-green-500 bg-opacity-25 px-4 py-1 rounded-md flex flex-row items-center gap-4">
                       {" "}
@@ -142,7 +144,7 @@ const Dashboard = () => {
                     </span>
                   </p>
 
-                  <p className="flex items-center justify-between px-10">
+                  <p className="flex items-center justify-between px-2">
                     Response Time:
                     <span
                       className={`${
@@ -179,13 +181,16 @@ const Dashboard = () => {
         <div className="w-[59%] flex flex-col justify-between">
           {/*  */}
           <div
-            className="h-[32%] rounded-lg bg-gray-800 p-10
-          "
+            className="h-[32%] rounded-lg bg-gray-800 p-10 w-full flex flex-col items-center"
           >
-            <p className="text-xl font-bold text-[#AAFFA9]">Monitoring</p>
+            <p className="text-xl font-bold text-[#AAFFA9] w-full">Monitoring</p>
+            <StorageInfo name="Render server" available={105.4} total={242.1}/>
           </div>
           <div className="h-[65.8%] bg-gray-800 rounded-lg p-10">
             <p className="text-xl font-bold text-[#AAFFA9]">Notifications</p>
+            <div className="w-full h-full flex justify-center items-center">
+              <p className="font-bold text-gray-500">Nothing yet ...</p>
+            </div>
           </div>
         </div>
       </div>
