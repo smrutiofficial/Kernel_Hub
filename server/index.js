@@ -7,8 +7,8 @@ const cors = require("cors");
 const tagsRouter = require("./routers/tag.route.js");
 const healthRouter=require("./routers/health.route.js");
 const mailsend =require("./routers/email.route.js");
-const GoogleStategy =require("passport-google-oauth20").Strategy;
-const session=require("express-session");
+const GoogleStrategy =require("passport-google-oauth20").Strategy;
+// const session=require("express-session");
 const GUser = require("./models/GUser.model.js")
 const Gauth =require("./routers/gauth.route.js")
 app.use(cors());
@@ -20,13 +20,13 @@ connectDB();
 
 // Middleware to parse incoming JSON
 app.use(express.json());
-app.use(
-  session({
-    secret:"secret",
-    resave:false,
-    saveUninitialized:true,
-  })
-);
+// app.use(
+//   session({
+//     secret:"secret",
+//     resave:false,
+//     saveUninitialized:true,
+//   })
+// );
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(
@@ -67,7 +67,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await User.findById(id);
+    const user = await GUser.findById(id);
     done(null, user);
   } catch (error) {
     done(error, null);
