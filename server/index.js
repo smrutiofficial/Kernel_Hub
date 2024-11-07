@@ -8,7 +8,7 @@ const tagsRouter = require("./routers/tag.route.js");
 const healthRouter=require("./routers/health.route.js");
 const mailsend =require("./routers/email.route.js");
 const GoogleStrategy =require("passport-google-oauth20").Strategy;
-// const session=require("express-session");
+const session=require("express-session");
 const GUser = require("./models/GUser.model.js")
 const Gauth =require("./routers/gauth.route.js")
 app.use(cors());
@@ -20,13 +20,13 @@ connectDB();
 
 // Middleware to parse incoming JSON
 app.use(express.json());
-// app.use(
-//   session({
-//     secret:"secret",
-//     resave:false,
-//     saveUninitialized:true,
-//   })
-// );
+app.use(
+  session({
+    secret:"secret",
+    resave:false,
+    saveUninitialized:true,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(
