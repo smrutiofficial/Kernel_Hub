@@ -110,6 +110,10 @@ export default function Register() {
       refs.current[0].focus();
     }
   }, [refs]);
+
+  const handleGoogleLogin = () => {
+    router.push(`${backend_link}/auth/google`);
+  };
   return (
     <>
       <div className=" relative">
@@ -217,7 +221,7 @@ export default function Register() {
                 </p>
                 <button
                   type="submit"
-                  onClick={() => setOtp("flex")}
+                  onClick={handleGoogleLogin}
                   className="py-3 px-4 rounded-lg bg-red-500 text-white font-medium"
                 >
                   Sign with Google
