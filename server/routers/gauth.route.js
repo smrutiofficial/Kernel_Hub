@@ -11,7 +11,7 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const { token } = req.user;
-    res.json({ token }); // Send token in JSON response
+    res.redirect(`https://kernelhub.vercel.app?token=${token}`); // Send token in JSON response
   }
 );
 
