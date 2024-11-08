@@ -2,17 +2,17 @@ const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 
-router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+// Endpoint to initiate Google authentication
+router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
+// Callback endpoint to send JSON response with token, no redirection
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/dashboard", // or wherever you want to redirect after success
-    failureRedirect: "/login",     // handle failure
-  })
+  passport.authenticate("google", { session: false }),
+  (req, res) => {
+    const { token } = req.user;
+    res.json({ token }); // Send token in JSON response
+  }
 );
 
 module.exports = router;

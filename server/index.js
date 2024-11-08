@@ -40,19 +40,19 @@ passport.use(
       try {
         let user = await GUser.findOne({ googleId: profile.id });
 
-        if (user) {
-          // If the user exists, proceed with that user
-          return done(null, user);
-        } else {
-          // If the user does not exist, create a new one
+        if (!user) {
           user = await new GUser({
             googleId: profile.id,
             displayName: profile.displayName,
-            email: profile.emails[0].value, // get email from profile
+            email: profile.emails[0].value,
           }).save();
-
-          return done(null, user);
         }
+
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+
+        return done(null, { user, token });
       } catch (error) {
         console.error(error);
         return done(error, false);
@@ -60,6 +60,7 @@ passport.use(
     }
   )
 );
+
 
 passport.serializeUser((user, done) => {
   done(null, user.id); // Save user ID in session
