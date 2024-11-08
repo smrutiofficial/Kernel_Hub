@@ -10,7 +10,8 @@ const mailsend =require("./routers/email.route.js");
 const GoogleStrategy =require("passport-google-oauth20").Strategy;
 const session=require("express-session");
 const GUser = require("./models/GUser.model.js")
-const Gauth =require("./routers/gauth.route.js")
+const Gauth =require("./routers/gauth.route.js");
+const jwt = require("jsonwebtoken");
 app.use(cors());
 // Load environment variables from .env file
 require("dotenv").config();
