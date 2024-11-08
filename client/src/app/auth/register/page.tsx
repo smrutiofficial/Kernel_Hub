@@ -5,7 +5,7 @@ import axios from "axios";
 // import { useRouter } from 'next/router';
 import Bg from "../../image/berny-transformed.png";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams  } from "next/navigation";
 import Link from "next/link";
 import { backend_link } from "@/app/constants/constant";
 
@@ -25,6 +25,7 @@ export default function Register() {
   const [otpArr, setOtpArr] = useState(otpinput);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,14 +107,37 @@ export default function Register() {
   };
 
   useEffect(() => {
-    if (refs.current[0]) {
+    if (otp==="flex" && refs.current[0]) {
       refs.current[0].focus();
     }
-  }, [refs]);
+  }, [refs,otp]);
 
   const handleGoogleLogin = () => {
     router.push(`${backend_link}/auth/google`);
   };
+  // In your callback handler (useEffect or a separate function)
+
+useEffect(() => {
+  const fetchGoogleToken = async () => {
+    try {
+      const response = await axios.get(`${backend_link}/auth/google/callback`, { withCredentials: true });
+      const { token } = response.data;
+  
+      // Save the token in localStorage or state
+      localStorage.setItem("token", token);
+      console.log("Google login successful:", token);
+  
+      // Redirect to a protected route or the homepage after login
+      router.push("/home");
+    } catch (error) {
+      console.error("Error during Google login:", error);
+    }
+  };
+  const token = searchParams.get("token");
+  if (token) {
+    fetchGoogleToken(); // Call the function only if token is in the URL
+  }
+}, [searchParams,router]);
   return (
     <>
       <div className=" relative">
