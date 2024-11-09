@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from "react";
 import Navbar from "@/app/components/Navbar";
+import { useRouter} from "next/navigation";
 import Footer from "@/app/components/footer";
 import axios from "axios";
 import moment from "moment";
@@ -19,6 +20,14 @@ import bg from "@/app/image/grain.jpg";
 import { transformerCopyButton } from "@rehype-pretty/transformers";
 import Preloader from '@/app/components/preloader';
 import ReactionBar from "@/app/components/ReactionBar";
+import ProfilePic from "../../image/profile-pic.png";
+
+interface Profile {
+  name: string;
+  email: string;
+  image?: string; // Make `image` optional
+  _id:string;
+}
 
 export default function PostPage({ params }: { params: { id: string } }) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,11 +40,13 @@ export default function PostPage({ params }: { params: { id: string } }) {
   const [comments, setComments] = useState<any[]>([]);
   const [paramid, setParamId] = useState("");
 
-  const [profile, setProfile] = useState({
+  const [profile, setProfile] = useState<Profile>({
     name: "",
     email: "",
-    _id:""
+    image: "",
+    _id:"",
   });
+  const router = useRouter();
   
   type Reaction = {
     userId: string;
@@ -96,6 +107,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
           setProfile({
             name: response.data.name,
             email: response.data.email,
+            image:response.data.image,
             _id:response.data._id
           });
         } catch (err) {
@@ -181,7 +193,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
   // if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-
+  
   return (
     <>
      {loading ? <Preloader /> : 
@@ -262,7 +274,24 @@ export default function PostPage({ params }: { params: { id: string } }) {
               <div className="mt-6 flex items-center">
                 <div className="flex flex-col w-full">
                   <div className="mb-6 flex flex-row gap-6 items-center">
-                    <div className="bg-gray-500 h-16 w-16 rounded-full"></div>
+                    <div className="bg-gray-500 h-16 w-16 rounded-full">
+                      {/* image profile pic */}
+                      {profile?.image ? (
+              <img
+                src={profile.image}
+                onClick={() => router.push("/profile")}
+                alt="Profile Image"
+                className="rounded-full w-full h-full object-cover border-2 border-emerald-300 cursor-pointer"
+              />
+            ) : (
+              <img
+                src={ProfilePic.src} // Use ProfilePic.src for fallback
+                onClick={() => router.push("/profile")}
+                alt="Default Profile Image"
+                className="rounded-full w-full h-full object-cover border-2 border-emerald-300 cursor-pointer"
+              />
+            )}
+                    </div>
                     <div>
                       <p className="capitalize font-bold tracking-wider text-lg text-transparent bg-clip-text bg-gradient-to-r from-[#AAFFA9] to-emerald-500 w-max">
                         {profile.name}

@@ -8,6 +8,7 @@ import Post from "./components/post";
 import Postrb from "./components/post_rb";
 import {backend_link} from "@/app/constants/constant";
 import Preloader from "@/app/components/preloader";
+// import axios from "axios";
 
 interface Post {
     _id: number;
@@ -46,6 +47,12 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
+  // const [imageFile, setImageFile] = useState<File | null>(null);
+
+  // const [success, setSuccess] = useState<string | null>(null);
+
+
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -112,7 +119,7 @@ export default function Home() {
         loaded with new features 👋🏻! let&apos;s view new updates .🥳
       </p>
     </div>
-    <Navbar />
+    <Navbar/>
     <div className="h-80 w-80 bg-[#AAFFA9] blur-[15rem] absolute -z-10 top-[22rem] left-[30%]"></div>
     <div className="h-80 w-80 bg-emerald-500 blur-[15rem] absolute -z-10 top-[22rem] left-[48%]"></div>
     <div className="container mx-auto px-4 py-8 flex flex-col justify-center items-center">
