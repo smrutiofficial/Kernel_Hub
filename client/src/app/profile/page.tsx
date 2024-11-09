@@ -1,10 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import Preloader from "@/app/components/preloader";
 import { backend_link } from "@/app/constants/constant";
-import Image from "next/image";
+// import Image from "next/image";
 
 const Page = () => {
   const [profile, setProfile] = useState({
@@ -29,7 +30,7 @@ const Page = () => {
           setProfile({
             name: response.data.name,
             email: response.data.email,
-            image: response.data.profileImage,
+            image: response.data.image,
             password: "",
           });
         } catch (err) {
@@ -75,7 +76,7 @@ const Page = () => {
       setSuccess("Profile updated successfully!");
       setProfile((prevProfile) => ({
         ...prevProfile,
-        image: response.data.user.profileImage,
+        image: response.data.user.image,
       }));
     } catch (err) {
       console.error(err);
@@ -93,13 +94,13 @@ const Page = () => {
         <p className="text-2xl font-bold mb-6">Profile Information</p>
         <div className="h-40 w-40 bg-gray-500 rounded-full mb-10 overflow-hidden">
           {profile.image ? (
-            <Image src={profile.image} alt="Profile Image" width={160} height={160} />
+            <img src={profile.image} alt="Profile Image" className="w-full h-full object-cover" />
           ) : (
             <p>No Image</p>
           )}
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col w-1/3 gap-4">
-          <input type="file" name="image" onChange={handleImageChange} />
+          <input type="file" name="image" className="text-white text-center" onChange={handleImageChange} />
           <input
             type="text"
             name="name"
