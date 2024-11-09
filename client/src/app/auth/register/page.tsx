@@ -120,7 +120,9 @@ export default function Register() {
     const fetchGoogleToken = async () => {
       try {
         const response = await axios.get(`${backend_link}/auth/google/callback`, { withCredentials: true });
-        const { token } = response.data;
+        const { token } = response.data.token;
+console.log(response.data);
+console.log(response.data.token);
 
         // Save the token in localStorage or state
         localStorage.setItem("token", token);

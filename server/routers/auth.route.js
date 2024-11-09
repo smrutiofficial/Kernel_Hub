@@ -9,6 +9,8 @@ const authMiddleware = require("../middlewares/auth.middleware"); // Import your
 const {verifyOtp}  =require("../middlewares/otpverify.middleware.js")
 const {sendOtp}=require("../middlewares/sendotp.middleware")
 const router = express.Router();
+const { upload } = require("../middlewares/profile_pic.middleware.js");
+
 
 
 router.post("/register", sendOtp);
@@ -22,6 +24,7 @@ router.post("/login", loginUser);
 router.get("/me", authMiddleware, getUserData); // Add the /me route with authentication middleware
 
 // Update user data
-router.put("/me", authMiddleware, updateUserData);
+router.put("/me", authMiddleware, upload.single("image"), updateUserData);
+// router.put("/me", authMiddleware, updateUserData);
 
 module.exports = router;

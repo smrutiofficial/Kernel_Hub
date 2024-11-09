@@ -3,40 +3,34 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";
 import Preloader from "@/app/components/preloader";
-import {backend_link} from "@/app/constants/constant"
+import { backend_link } from "@/app/constants/constant";
+import Image from "next/image";
 
 const Page = () => {
   const [profile, setProfile] = useState({
     name: "",
     email: "",
+    image: "",
     password: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null); // State to handle success message
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000); // Simulate loading time
-    return () => clearTimeout(timer);
-  }, [setLoading]);
+  const [success, setSuccess] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
-
       if (token) {
         try {
-          const response = await axios.get(
-            `${backend_link}/api/auth/me`,
-            {
-              headers: {
-                "x-auth-token": token,
-              },
-            }
-          );
-
+          const response = await axios.get(`${backend_link}/api/auth/me`, {
+            headers: { "x-auth-token": token },
+          });
           setProfile({
             name: response.data.name,
             email: response.data.email,
-            password: "", // Do not set the password from the response
+            image: response.data.profileImage,
+            password: "",
           });
         } catch (err) {
           console.error(err);
@@ -53,86 +47,90 @@ const Page = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
+    setProfile((prevProfile) => ({ ...prevProfile, [name]: value }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
 
-    const token = localStorage.getItem("token"); // Get token from local storage
+    const formData = new FormData();
+    formData.append("name", profile.name);
+    formData.append("email", profile.email);
+    if (profile.password) formData.append("password", profile.password);
+    if (imageFile) formData.append("image", imageFile);
+
     try {
-      await axios.put(`h${backend_link}/api/auth/me`, profile, {
-        headers: {
-          "x-auth-token": token, // Include the token in the header
-        },
-      });
-      setSuccess("Profile updated successfully!"); // Set success message
+      const response = await axios.put(
+        `${backend_link}/api/auth/me`,
+        formData,
+        { headers: { "x-auth-token": token, "Content-Type": "multipart/form-data" } }
+      );
+      setSuccess("Profile updated successfully!");
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        image: response.data.user.profileImage,
+      }));
     } catch (err) {
       console.error(err);
-      setError("Failed to update profile."); // Handle error
+      setError("Failed to update profile.");
     }
   };
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+  if (loading) return <Preloader />;
+  if (error) return <p>{error}</p>;
 
   return (
-    <>
-      {loading ? (
-        <Preloader />
-      ) : (
-        <div className="">
-          <div>
-            <Navbar />
-            <div className="flex flex-col items-center justify-center mt-8">
-              <p className="text-2xl font-bold mb-6">Profile Information</p>
-              <div className="h-40 w-40 bg-gray-500 rounded-full mb-10"></div>
-              <form
-                className="flex flex-col w-1/3 gap-4"
-                onSubmit={handleSubmit}
-              >
-                <input
-                  type="text"
-                  name="name"
-                  value={profile.name}
-                  onChange={handleInputChange}
-                  className="input py-3 px-4 rounded-lg bg-gray-800 text-gray-200"
-                  placeholder="Name"
-                />
-                <input
-                  type="email"
-                  name="email"
-                  value={profile.email}
-                  onChange={handleInputChange}
-                  className="input py-3 px-4 rounded-lg bg-gray-800 text-gray-200"
-                  placeholder="Email"
-                />
-                <input
-                  type="password"
-                  name="password"
-                  value={profile.password}
-                  onChange={handleInputChange}
-                  className="input py-3 px-4 rounded-lg bg-gray-800 text-gray-200"
-                  placeholder="Password"
-                />
-                <button
-                  type="submit"
-                  className="py-3 px-4 rounded-lg bg-gradient-to-r from-[#AAFFA9] to-emerald-500 text-gray-900 font-bold"
-                >
-                  UPDATE
-                </button>
-              </form>
-              {success && <p className="text-green-500">{success}</p>}{" "}
-              {/* Display success message */}
-            </div>
-          </div>
+    <div>
+      <Navbar />
+      <div className="flex flex-col items-center justify-center mt-8">
+        <p className="text-2xl font-bold mb-6">Profile Information</p>
+        <div className="h-40 w-40 bg-gray-500 rounded-full mb-10 overflow-hidden">
+          {profile.image ? (
+            <Image src={profile.image} alt="Profile Image" width={160} height={160} />
+          ) : (
+            <p>No Image</p>
+          )}
         </div>
-      )}
-    </>
+        <form onSubmit={handleSubmit} className="flex flex-col w-1/3 gap-4">
+          <input type="file" name="image" onChange={handleImageChange} />
+          <input
+            type="text"
+            name="name"
+            value={profile.name}
+            onChange={handleInputChange}
+            className="input py-3 px-4 rounded-lg bg-gray-800 text-gray-200"
+            placeholder="Name"
+          />
+          <input
+            type="email"
+            name="email"
+            value={profile.email}
+            onChange={handleInputChange}
+            className="input py-3 px-4 rounded-lg bg-gray-800 text-gray-200"
+            placeholder="Email"
+          />
+          <input
+            type="password"
+            name="password"
+            value={profile.password}
+            onChange={handleInputChange}
+            className="input py-3 px-4 rounded-lg bg-gray-800 text-gray-200"
+            placeholder="Password"
+          />
+          <button type="submit" className="py-3 px-4 rounded-lg bg-gradient-to-r from-[#AAFFA9] to-emerald-500 text-gray-900 font-bold">
+            UPDATE
+          </button>
+        </form>
+        {success && <p className="text-green-500">{success}</p>}
+      </div>
+    </div>
   );
 };
 

@@ -67,32 +67,41 @@ const getUserData = async (req, res) => {
 };
 
 const updateUserData = async (req, res) => {
-  const { name, email, password } = req.body; // Get the data from the request body
+  const { name, email, password} = req.body;
+  
   try {
-    // Find the user by ID from the token
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
 
-    // Update user fields
+    // Update fields if provided
     if (name) user.name = name;
     if (email) user.email = email;
 
-    // If the password is being updated, hash it before saving
+    // Handle image upload if a file is included
+    if (req.file) {
+      user.profileImage = req.file.path; // Store the image URL from Cloudinary
+    }
+
+    // Update and hash password if provided
     if (password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }
 
-    await user.save(); // Save the updated user data
+    await user.save();
 
-    res.json({ msg: "User updated successfully", user: { name: user.name, email: user.email } }); // Do not send the password back
+    res.json({
+      msg: "User updated successfully",
+      user: { name: user.name, email: user.email, profileImage: user.profileImage }
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: "Server error while updating user data" });
   }
 };
+
 
 
 module.exports = { registerUser, loginUser, getUserData, updateUserData };
