@@ -81,7 +81,7 @@ const updateUserData = async (req, res) => {
 
     // Handle image upload if a file is included
     if (req.file) {
-      user.profileImage = req.file.path; // Store the image URL from Cloudinary
+      user.image = req.file.path; // Store the image URL from Cloudinary
     }
 
     // Update and hash password if provided
@@ -94,7 +94,7 @@ const updateUserData = async (req, res) => {
 
     res.json({
       msg: "User updated successfully",
-      user: { name: user.name, email: user.email, profileImage: user.profileImage }
+      user: { name: user.name, email: user.email, image: user.image }
     });
   } catch (err) {
     console.error(err);
