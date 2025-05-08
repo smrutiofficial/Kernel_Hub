@@ -47,7 +47,7 @@ const ReactionBar = ({
     try {
       // Send the reaction to your backend API
       await axios.post(
-        `${backend_link}/api/posts/${postId}/reaction`,
+        `${backend_link}/api/posts/reaction/${postId}`,
         {
           userId,
           reactionType,

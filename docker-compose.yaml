@@ -39,37 +39,37 @@ services:
     restart: unless-stopped
     command: npm run dev # Use your development command if you want hot-reloading
 
-  client:
-    build:
-      context: .
-      dockerfile: client/Dockerfile
-    container_name: client
-    ports:
-      - "3000:3000"
-    depends_on:
-      - server
-    volumes:
-      - ./client:/client/src/app
-    networks:
-      - app-network
-    restart: unless-stopped
-    command: npm run dev # Use your development command if you want hot-reloading
+  # client:
+  #   build:
+  #     context: .
+  #     dockerfile: client/Dockerfile
+  #   container_name: client
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - server
+  #   volumes:
+  #     - ./client:/client/src/app
+  #   networks:
+  #     - app-network
+  #   restart: unless-stopped
+  #   command: npm run dev # Use your development command if you want hot-reloading
 
-  admin:
-    build:
-      context: .
-      dockerfile: admin/Dockerfile
-    container_name: admin
-    ports:
-      - "4000:4000"
-    depends_on:
-      - server
-    volumes:
-      - ./admin:/admin/app
-    networks:
-      - app-network
-    restart: unless-stopped
-    command: npm run dev # Use your development command if you want hot-reloading
+  # admin:
+  #   build:
+  #     context: .
+  #     dockerfile: admin/Dockerfile
+  #   container_name: admin
+  #   ports:
+  #     - "4000:4000"
+  #   depends_on:
+  #     - server
+  #   volumes:
+  #     - ./admin:/admin/app
+  #   networks:
+  #     - app-network
+  #   restart: unless-stopped
+  #   command: npm run dev # Use your development command if you want hot-reloading
 
 volumes:
   mongo-data:
