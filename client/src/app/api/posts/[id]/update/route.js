@@ -1,6 +1,7 @@
 import Post from "../../../../backend/models/Post.model";
+import {NextResponse} from "next/server";
 
-export const PUT = async (req, res) => {
+export const PUT = async (req) => {
     const { id } = req.params;
     const { title, content, slug, tags } = req.body;
     const image = req.file ? `/public/temp/${req.file.filename}` : "";
@@ -11,9 +12,9 @@ export const PUT = async (req, res) => {
         { new: true }
       );
       if (!updatedPost)
-        return res.status(404).json({ message: "Post not found" });
-      res.status(200).json(updatedPost);
+        return NextResponse.status(404).json({ message: "Post not found" });
+      NextResponse.status(200).json(updatedPost);
     } catch (error) {
-      res.status(500).json({ message: "Error updating post", error });
+      NextResponse.status(500).json({ message: "Error updating post", error });
     }
   };

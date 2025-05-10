@@ -1,9 +1,10 @@
 import Post from "../../../backend/models/Post.model";
+import {NextResponse} from "next/server";
 
-export const createPost = async (req, res) => {
+export const createPost = async (req) => {
     try {
       if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded." });
+        return NextResponse.status(400).json({ message: "No file uploaded." });
       }
   
       const { title, slug, tags, content } = req.body;
@@ -26,9 +27,9 @@ export const createPost = async (req, res) => {
       // Add your logic to save `newPost` to the database here
       // Save the post
       const post = await newPost.save();
-      res.json(post);
+      NextResponse.json(post);
     } catch (error) {
       console.error("Error creating post:", error);
-      res.status(500).json({ message: "Error creating post", error });
+      NextResponse.status(500).json({ message: "Error creating post", error });
     }
   };

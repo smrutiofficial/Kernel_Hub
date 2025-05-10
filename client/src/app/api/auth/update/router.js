@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import UserModel from '@/server/models/User.model';
+import UserModel from '../../../backend/models/User.model';
 import bcrypt from 'bcryptjs';
 
 export const PUT = async (req) => {
