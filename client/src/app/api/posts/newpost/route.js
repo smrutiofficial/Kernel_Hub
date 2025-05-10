@@ -1,7 +1,7 @@
 import Post from "../../../backend/models/Post.model";
 import {NextResponse} from "next/server";
 
-export const createPost = async (req) => {
+export const POST = async (req) => {
     try {
       if (!req.file) {
         return NextResponse.status(400).json({ message: "No file uploaded." });
