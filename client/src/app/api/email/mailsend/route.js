@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
+import { NextResponse } from "next/server";
 
-const mailsend = async (req, res) => {
+export const GET = async () => {
   const transporter = await nodemailer.createTransport({
     host: "smtp.gmail.com",
     // port: 465,
@@ -18,8 +19,7 @@ const mailsend = async (req, res) => {
     text: "Hello world?", // plain text body
     html: "<b>Hello from kernel hub?</b>", // html body
   });
-  console.log(info);
-  res.send(info);
+  // console.log(info);
+  NextResponse.send(info);
 };
 
-module.exports = { mailsend };
