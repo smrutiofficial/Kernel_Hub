@@ -1,0 +1,12 @@
+FROM node:22
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+ENV SKIP_BUILD_STATIC_GENERATION=true
+# ENV NODE_ENV=developement
+EXPOSE 3000
+CMD ["npm", "run", "start"]

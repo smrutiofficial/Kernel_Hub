@@ -51,6 +51,6 @@ export const GET = async () => {
     NextResponse.status(200).json({ status: 'Healthy', data: healthData });
   } catch (error) {
     console.error('Health check error:', error);
-    NextResponse.status(500).json({ status: 'Unhealthy', error: error.message });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 };

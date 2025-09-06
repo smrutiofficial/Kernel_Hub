@@ -21,6 +21,6 @@ export const POST = async (req) => {
     });
   } catch (err) {
     console.error(err.message);
-    NextResponse.status(500).send("Server error");
+    return new NextResponse('Server error', { status: 500 });
   }
 };

@@ -1,9 +1,4 @@
 # version: "3.8"
-
-networks:
-  app-network:
-    driver: bridge
-
 services:
   mongodb:
     image: mongo:latest
@@ -11,7 +6,7 @@ services:
     ports:
       - "8001:27017"
     volumes:
-      - mongo-data:/data/db
+      - /home/smruti/Development/updatep/Kernel_Hub/mongo-data/:/data/db
     networks:
       - app-network
     restart: unless-stopped
@@ -21,55 +16,69 @@ services:
       timeout: 5s
       retries: 5
 
-  server:
+  build-checks:
     build:
-      context: .
-      dockerfile: server/Dockerfile
-    container_name: server
-    env_file:
-      - ./server/.env
+      context: ./client
+      dockerfile: Dockerfile.prod
+    command: sh -c "npx tsc --noEmit && npm run build"
+    networks:
+      - app-network
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: client
     ports:
-      - "5000:5000"
-    depends_on:
-      - mongodb
+      - "3000:3000"
     volumes:
-      - ./server:/server
+    - ./client:/app
+    - node_modules:/app/node_modules
+    - /app/.next
+    environment:
+      - NODE_ENV=developement
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_=true
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     networks:
       - app-network
     restart: unless-stopped
     command: npm run dev # Use your development command if you want hot-reloading
 
-  # client:
+  # server:
   #   build:
   #     context: .
-  #     dockerfile: client/Dockerfile
-  #   container_name: client
+  #     dockerfile: server/Dockerfile
+  #   container_name: server
+  #   env_file:
+  #     - ./server/.env
   #   ports:
-  #     - "3000:3000"
+  #     - "5000:5000"
   #   depends_on:
-  #     - server
+  #     - mongodb
   #   volumes:
-  #     - ./client:/client/src/app
+  #     - ./server:/server
   #   networks:
   #     - app-network
   #   restart: unless-stopped
   #   command: npm run dev # Use your development command if you want hot-reloading
-
+  #
   # admin:
   #   build:
-  #     context: .
-  #     dockerfile: admin/Dockerfile
+  #     context: ./admin
+  #     dockerfile: ./Dockerfile
   #   container_name: admin
   #   ports:
   #     - "4000:4000"
-  #   depends_on:
-  #     - server
   #   volumes:
   #     - ./admin:/admin/app
   #   networks:
   #     - app-network
   #   restart: unless-stopped
   #   command: npm run dev # Use your development command if you want hot-reloading
-
+  #
+networks:
+  app-network:
+    driver: bridge
 volumes:
-  mongo-data:
+  node_modules:
