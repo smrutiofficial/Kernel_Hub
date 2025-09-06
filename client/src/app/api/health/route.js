@@ -1,4 +1,7 @@
-// healthController.js
+// Force dynamic rendering to prevent build-time prerendering
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 import mongoose from "mongoose";
 import os from "os";
 import cloudinary from "cloudinary";
@@ -9,7 +12,7 @@ export const GET = async () => {
     // Check database connectivity
     const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
     let dbResponseTime = 'N/A';
-
+    
     if (mongoose.connection.db) {
       const dbResponseStart = process.hrtime();
       // Attempt a simple operation instead of command({ ping: 1 })
@@ -26,7 +29,7 @@ export const GET = async () => {
       await cloudinary.v2.api.ping();
       cloudinaryStatus = 'Connected';
     } catch (err) {
-      console.error('Cloudinary connection error:', err);
+      console.error('Cloudinary connection error:', err.message);
     }
 
     // Get server uptime and memory usage
@@ -48,7 +51,9 @@ export const GET = async () => {
       }
     };
 
-    NextResponse.status(200).json({ status: 'Healthy', data: healthData });
+    // FIXED: Use proper NextResponse syntax
+    return NextResponse.json({ status: 'Healthy', data: healthData }, { status: 200 });
+    
   } catch (error) {
     console.error('Health check error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
