@@ -1,26 +1,27 @@
 // app/sitemap.ts
 import { MetadataRoute } from "next";
+import connectDB from "@/app/backend/lib/db/db";  // your db connection
+import Post from "@/app/backend/models/Post.model";  // your Mongoose post model
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Fetch your blog posts (replace with your API or DB call)
-  const res = await fetch("https://kernelhub-devsmrutii.vercel.app/api/posts");
-  const posts: { slug: string; updatedAt: string }[] = await res.json();
+  await connectDB();
+  const posts = await Post.find({}, "slug updatedAt").lean();
 
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: "https://kernelhub-devsmruti.vercel.app/",
+      url: "https://kernelhub-devsmrutii.vercel.app/",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: "https://kernelhub-devsmruti.vercel.app/about",
+      url: "https://kernelhub-devsmrutii.vercel.app/about",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: "https://kernelhub-devsmruti.vercel.app/resources",
+      url: "https://kernelhub-devsmrutii.vercel.app/resources",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
@@ -28,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const dynamicPages: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `https://kernelhub-devsmruti.vercel.app/blog/${post.slug}`,
+    url: `https://kernelhub-devsmrutii.vercel.app/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt),
     changeFrequency: "weekly",
     priority: 0.7,
