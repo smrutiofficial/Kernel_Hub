@@ -1,7 +1,7 @@
 // app/sitemap.ts
 import { MetadataRoute } from "next";
-import connectDB from "@/app/backend/lib/db/db";  // your db connection
-import Post from "@/app/backend/models/Post.model";  // your Mongoose post model
+import connectDB from "@/app/backend/lib/db/db"; // your db connection
+import Post from "@/app/backend/models/Post.model"; // your Mongoose post model
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   await connectDB();
@@ -30,7 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const dynamicPages: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `https://kernelhub-devsmrutii.vercel.app/blog/${post.slug}`,
-    lastModified: new Date(post.updatedAt),
+    lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
     changeFrequency: "weekly",
     priority: 0.7,
   }));
