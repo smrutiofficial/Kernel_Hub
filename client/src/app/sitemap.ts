@@ -9,19 +9,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticPages: MetadataRoute.Sitemap = [
     {
-      url: "https://kernelhub-devsmrutii.vercel.app/",
+      url: "https://kernelhub-smrutiprakashrout.vercel.app/",
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: "https://kernelhub-devsmrutii.vercel.app/about",
+      url: "https://kernelhub-smrutiprakashrout.vercel.app/about",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: "https://kernelhub-devsmrutii.vercel.app/resources",
+      url: "https://kernelhub-smrutiprakashrout.vercel.app/resources",
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
@@ -29,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const dynamicPages: MetadataRoute.Sitemap = posts.map((post) => ({
-    url: `https://kernelhub-devsmrutii.vercel.app/blog/${post.slug}`,
+    url: `https://kernelhub-smrutiprakashrout.vercel.app/blog/${post.slug}`,
     lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
     changeFrequency: "weekly",
     priority: 0.7,
